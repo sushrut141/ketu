@@ -1,4 +1,4 @@
-add_library(Scenarios random_nodes.cpp random_nodes.h scenario.h)
+add_library(Scenarios random_nodes.cpp random_nodes.h simulation_viewer.h scenario.h)
 
 find_package(OpenSceneGraph REQUIRED
         osg
