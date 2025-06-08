@@ -8,6 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF) # Use strict C++ standard
 
 
 add_subdirectory(world)
+add_subdirectory(objects)
 
 # Define your executable
 add_executable(capture_views capture_views.cpp)
