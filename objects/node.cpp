@@ -2,12 +2,10 @@
 
 namespace ketu::objects
 {
-    using ketu::world::World;
 
-    Node::Node(const ketu::world::World* world)
+    Node::Node(const ketu::sensing::SensingClient* sensing_client)
     {
-        this->world_ = world;
+        this->sensing_client_ = sensing_client;
     }
-
 
 } // namespace ketu::objects
