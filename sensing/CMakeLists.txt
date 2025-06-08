@@ -2,9 +2,10 @@
 add_library(Sensing SHARED sensing_client.cpp sensing_client.h)
 
 # Specify its own include directories if it has public headers
-target_include_directories(Sensing PUBLIC
+target_include_directories(Sensing PRIVATE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         $<INSTALL_INTERFACE:include>
+        World
 )
 
-target_link_libraries(Sensing PUBLIC World)
+target_link_libraries(Sensing PRIVATE World)

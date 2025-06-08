@@ -13,10 +13,10 @@ add_subdirectory(sensing)
 add_subdirectory(communication)
 
 # Define your executable
-add_executable(capture_views capture_views.cpp)
+add_executable(main main.cpp)
 
 # Link the OpenSceneGraph libraries to your executable
-target_link_libraries(capture_views
+target_link_libraries(main
         World
 )
 

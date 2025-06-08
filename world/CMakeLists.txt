@@ -19,7 +19,7 @@ endif()
 
 # Define public include directories for this library
 # This makes its headers available to projects that link against it (like MyOsgProject)
-target_include_directories(World PUBLIC
+target_include_directories(World PRIVATE
         $<INSTALL_INTERFACE:include/world> # For installation
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> # For local build within the project
         ${OPENSCENEGRAPH_INCLUDE_DIRS}
