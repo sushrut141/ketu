@@ -1,7 +1,7 @@
 #ifndef SENSING_CLIENT_H
 #define SENSING_CLIENT_H
 
-#include "world.h"
+#include "../world/world.h"
 
 namespace ketu::sensing {
 

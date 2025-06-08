@@ -11,13 +11,15 @@ add_subdirectory(world)
 add_subdirectory(objects)
 add_subdirectory(sensing)
 add_subdirectory(communication)
+add_subdirectory(telemetry)
+add_subdirectory(scenarios)
 
 # Define your executable
 add_executable(main main.cpp)
 
 # Link the OpenSceneGraph libraries to your executable
 target_link_libraries(main
-        World
+        Scenarios
 )
 
 # (Optional) Copy cessna.osg to the build directory for running

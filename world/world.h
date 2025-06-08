@@ -1,14 +1,10 @@
 #ifndef WORLD_H
 #define WORLD_H
 
+#include <unordered_map>
 #include <vector>
-#include <memory>
 
-#include <osg/Geode>
-#include <osg/ShapeDrawable>
-#include <osgViewer/Viewer>
-
-#include "../objects/node.h"
+#include "../telemetry/position.h"
 
 namespace ketu::world
 {
@@ -21,18 +17,12 @@ namespace ketu::world
         World();
 
         // Adds a node to the scene.
-        void addNode(const std::shared_ptr<ketu::objects::Node> node);
+        bool addNode(const std::string& node_id, const ketu::telemetry::Position& position);
 
-        // Render all the nodes in the world.
-        void render();
+        bool updateNode(const std::string& node_id, const ketu::telemetry::Position& position);
+
     private:
-        std::vector<std::shared_ptr<ketu::objects::Node>> nodes_;
-        std::unordered_map<std::string, osg::ref_ptr<osg::ShapeDrawable>> node_osg_drawable_map_;
-
-        // OSG specific member variables
-        osg::ref_ptr<osgViewer::Viewer> osgViewer_;
-        osg::ref_ptr<osg::Group> osgSceneRoot_;
-        osg::ref_ptr<osg::Geode> osgRootGeode_;
+        std::unordered_map<std::string, ketu::telemetry::Position> node_positions_map_;
     };
 
 } // ketu::world

@@ -1,6 +1,6 @@
 #ifndef COMMUNICATION_H
 #define COMMUNICATION_H
-#include "world.h"
+#include "../world/world.h"
 
 namespace ketu::communication
 {
