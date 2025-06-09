@@ -25,4 +25,10 @@ bool World::updateNode(const std::string& node_id, const ketu::telemetry::Positi
     return false;
 }
 
+    const std::unordered_map<std::string, ketu::telemetry::Position>& World::getNodePositions() const
+    {
+        return this->node_positions_map_;
+    }
+
+
 } // namespace ketu::world

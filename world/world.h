@@ -21,6 +21,8 @@ namespace ketu::world
 
         bool updateNode(const std::string& node_id, const ketu::telemetry::Position& position);
 
+        const std::unordered_map<std::string, ketu::telemetry::Position>& getNodePositions() const;
+
     private:
         std::unordered_map<std::string, ketu::telemetry::Position> node_positions_map_;
     };
