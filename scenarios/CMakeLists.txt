@@ -2,24 +2,15 @@ add_library(
         Scenarios
         random_nodes.h
         random_nodes.cpp
-        simulation_viewer.h
         scenario.h
         scenario.cpp
 )
 
-find_package(OpenSceneGraph REQUIRED
-        osg
-        osgDB
-        osgGA
-        osgViewer
-        osgText
-        osgUtil
-        OpenThreads # OSG often depends on OpenThreads
-)
+find_package(raylib CONFIG REQUIRED)
 
 # Check if OpenSceneGraph was found
-if (NOT OPENSCENEGRAPH_FOUND)
-    message(FATAL_ERROR "OpenSceneGraph not found. Please set OpenSceneGraph_DIR or CMAKE_PREFIX_PATH.")
+if (NOT raylib_FOUND)
+    message(FATAL_ERROR "Raylib not found. Please ensure it's installed and discoverable by CMake.")
 endif()
 
 # Define public include directories for this library
@@ -27,11 +18,12 @@ endif()
 target_include_directories(Scenarios PUBLIC
         $<INSTALL_INTERFACE:include> # For installation
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> # For local build within the project
-        ${OPENSCENEGRAPH_INCLUDE_DIRS}
+        ${raylib_INCLUDE_DIRS}
+        ${raylib_INCLUDE_DIRS}/raylib
 )
 
 target_link_libraries(Scenarios PRIVATE
-        ${OPENSCENEGRAPH_LIBRARIES}
+        ${raylib_LIBRARIES}
         Telemetry
         World
         Objects

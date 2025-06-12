@@ -6,10 +6,6 @@
 #include <memory>
 #include <unordered_map>
 
-#include <osg/Geode>
-#include <osg/ShapeDrawable>
-#include <osgViewer/Viewer>
-
 namespace ketu::scenarios
 {
     class Scenario {
@@ -35,17 +31,6 @@ namespace ketu::scenarios
         virtual void onTick();
 
         std::unique_ptr<ketu::world::World> world_;
-
-    private:
-
-        void addNodeToRenderedScene(const std::string& node_id, const ketu::telemetry::Position& position);
-
-        // OSG specific member variables
-        osg::ref_ptr<osgViewer::Viewer> osgViewer_;
-        osg::ref_ptr<osg::Group> osgSceneRoot_;
-        osg::ref_ptr<osg::Geode> osgRootGeode_;
-
-        std::unordered_map<std::string, osg::ref_ptr<osg::ShapeDrawable>> node_osg_drawable_map_;
     };
 
 

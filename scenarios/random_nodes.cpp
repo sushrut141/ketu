@@ -21,7 +21,7 @@ namespace ketu::scenarios
     void RandomNodes::setup()
     {
         ketu::objects::Node node("sphere_1", sensing_client_.get(), communication_client_.get());
-        ketu::telemetry::Position position(1.0, 1.0, 100.5);
+        ketu::telemetry::Position position(1.0, 1.0, 0.5);
 
         nodes_.push_back(node);
         world_->addNode(node.getId(), position);
