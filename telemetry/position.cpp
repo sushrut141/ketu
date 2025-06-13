@@ -5,6 +5,8 @@ namespace ketu::telemetry
     Position::Position(double x, double y, double z):
     x_(x), y_(y), z_(z) {}
 
+    Position::Position():
+    x_(0.0), y_(0.0), z_(0.0) {}
 
     double Position::getX() const { return x_; }
 

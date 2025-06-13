@@ -1,6 +1,9 @@
 #include "random_nodes.h"
 
 #include <iostream>
+#include <cmath>
+#include <valarray>
+
 #include "../objects/node.h"
 
 namespace ketu::scenarios
@@ -27,15 +30,20 @@ namespace ketu::scenarios
         world_->addNode(node.getId(), position);
     }
 
-    void RandomNodes::onNodeUpdated()
+    void RandomNodes::onTick(unsigned long long frameNumber)
     {
+        for (const auto& node : nodes_)
+        {
+            const auto& position = world_->getNodePosition(node.getId());
 
-    }
+            double newX = 2.0 * std::sin(frameNumber * M_PI / 180000);
+            double newY = 2.0 * std::cos(frameNumber * M_PI / 180000);
+            double newZ = 2.0 * std::tan(frameNumber * M_PI / 180000);
 
-    void RandomNodes::onTick()
-    {
-        Scenario::onTick();
-        std::cout << "RandomNodes::onTick()" << std::endl;
+            std::cout << "RandomNodes::onTick() for frame " << newX  << " " << newY << " " << newZ << std::endl;
+
+            world_->updateNode(node.getId(), ketu::telemetry::Position(newX, newY, newZ));
+        }
     }
 
 } // namespace ketu::scenarios

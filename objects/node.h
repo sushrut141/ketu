@@ -18,7 +18,7 @@ namespace ketu::objects
         );
 
         // Returns the unique id of the node.
-        const std::string& getId();
+        const std::string& getId() const;
 
     private:
         const std::string node_id_;

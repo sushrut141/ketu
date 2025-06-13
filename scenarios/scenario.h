@@ -15,9 +15,6 @@ namespace ketu::scenarios
         // required to run this scenario.
         virtual void setup() = 0;
 
-        // Callback invoked when a nodes state is updated.
-        virtual void onNodeUpdated() = 0;
-
         // Run the scenario.
         void run();
 
@@ -27,10 +24,12 @@ namespace ketu::scenarios
 
         // Invoked before each rendering frame to reflect the changed world state.
         // Changes to the world are automatically reflected in the viewer.
-        // Base class method must be invoked before derived implementation.
-        virtual void onTick();
+        virtual void onTick(unsigned long long frameNumber) = 0;
 
         std::unique_ptr<ketu::world::World> world_;
+
+    private:
+        unsigned long long frameNumber_;
     };
 
 

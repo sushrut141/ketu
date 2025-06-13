@@ -13,12 +13,10 @@ namespace ketu::scenarios
         static std::unique_ptr<RandomNodes> create();
 
         void setup();
-
-        void onTick();
-
-        void onNodeUpdated();
     private:
         RandomNodes(std::unique_ptr<ketu::world::World> world);
+
+        void onTick(unsigned long long frameNumber);
 
         std::unique_ptr<ketu::sensing::SensingClient> sensing_client_;
         std::unique_ptr<ketu::communication::CommunicationClient> communication_client_;

@@ -13,7 +13,7 @@ namespace ketu::objects
     {
     }
 
-    const std::string& Node::getId()
+    const std::string& Node::getId() const
     {
         return this->node_id_;
     }

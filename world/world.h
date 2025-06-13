@@ -23,8 +23,12 @@ namespace ketu::world
 
         const std::unordered_map<std::string, ketu::telemetry::Position>& getNodePositions() const;
 
+        const ketu::telemetry::Position& getNodePosition(const std::string& node_id) const;
+
     private:
         std::unordered_map<std::string, ketu::telemetry::Position> node_positions_map_;
+
+        const ketu::telemetry::Position ORIGIN_;
     };
 
 } // ketu::world

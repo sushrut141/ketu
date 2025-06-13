@@ -11,8 +11,7 @@ namespace ketu::scenarios
     Scenario::Scenario(std::unique_ptr<ketu::world::World> world)
     {
         world_ = std::move(world);
-        // Setup ODG rendering variables.
-        // std::function<void()> tick_callback = std::bind(&Scenario::onTick, this);
+        frameNumber_ = 0;
     }
 
     void Scenario::run()
@@ -30,6 +29,8 @@ namespace ketu::scenarios
         Color sphereColor = BLUE;
         while (!WindowShouldClose())
         {
+            onTick(frameNumber_);
+
             BeginDrawing(); // Start drawing operations
 
             ClearBackground(RAYWHITE); // Clear the background with a white color
@@ -45,7 +46,7 @@ namespace ketu::scenarios
                 spherePosition.z = node_position.getZ();
 
                 // Draw the sphere
-                DrawSphere(spherePosition, 0.5f, sphereColor);
+                DrawSphere(spherePosition, 0.2f, sphereColor);
 
                 // Optionally, draw a grid to help visualize the 3D space
                 DrawGrid(20, 1.0f); // Larger grid for larger movement range
@@ -56,12 +57,9 @@ namespace ketu::scenarios
             DrawFPS(10, 10); // Display FPS at top-left corner
 
             EndDrawing(); // End drawing and swap buffers
+
+            frameNumber_ += 1;
         }
-    }
-
-    void Scenario::onTick()
-    {
-
     }
 
 } // namespace ketu::scenarios

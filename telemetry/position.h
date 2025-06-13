@@ -8,6 +8,8 @@ namespace ketu::telemetry
     public:
         Position(double x, double y, double z);
 
+        Position();
+
         double getX() const;
         double getY() const;
         double getZ() const;
