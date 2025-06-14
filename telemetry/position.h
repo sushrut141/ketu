@@ -4,7 +4,8 @@
 
 namespace ketu::telemetry
 {
-    class Position {
+    class Position
+    {
     public:
         Position(double x, double y, double z);
 
@@ -27,6 +28,4 @@ namespace ketu::telemetry
 } // namespace ketu::telemetry
 
 
-
-
-#endif //POSITION_H
+#endif // POSITION_H

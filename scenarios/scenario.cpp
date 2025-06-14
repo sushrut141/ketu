@@ -19,12 +19,12 @@ namespace ketu::scenarios
         InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Raylib Sphere Renderer with Mouse Pan");
 
         // Define the camera parameters (position, target, up, field of view)
-        Camera camera = { 0 }; // Initialize camera struct to zero
-        camera.position = (Vector3){ 0.0f, 10.0f, 10.0f }; // Camera position
-        camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };    // Camera looks at this point
-        camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };      // Camera up vector
-        camera.fovy = 45.0f;                             // Camera field-of-view in Y-direction
-        camera.projection = CAMERA_PERSPECTIVE;          // Use perspective projection
+        Camera camera = {0}; // Initialize camera struct to zero
+        camera.position = (Vector3){0.0f, 10.0f, 10.0f}; // Camera position
+        camera.target = (Vector3){0.0f, 0.0f, 0.0f}; // Camera looks at this point
+        camera.up = (Vector3){0.0f, 1.0f, 0.0f}; // Camera up vector
+        camera.fovy = 45.0f; // Camera field-of-view in Y-direction
+        camera.projection = CAMERA_PERSPECTIVE; // Use perspective projection
 
         Color sphereColor = BLUE;
         while (!WindowShouldClose())
@@ -37,7 +37,7 @@ namespace ketu::scenarios
 
             BeginMode3D(camera); // Start 3D drawing with the defined camera
 
-            for (const auto& node_id_pos_pair: world_->getNodePositions())
+            for (const auto& node_id_pos_pair : world_->getNodePositions())
             {
                 const auto& node_position = node_id_pos_pair.second;
                 Vector3 spherePosition;

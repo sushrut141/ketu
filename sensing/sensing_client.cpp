@@ -1,11 +1,9 @@
 #include "sensing_client.h"
 
-namespace ketu::sensing {
+namespace ketu::sensing
+{
 
-    SensingClient::SensingClient(const ketu::world::World* world)
-    {
-        this->world_ = world;
-    }
+    SensingClient::SensingClient(const ketu::world::World* world) { this->world_ = world; }
 
 
 } // namespace ketu::sensing

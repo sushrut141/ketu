@@ -8,7 +8,8 @@
 
 namespace ketu::scenarios
 {
-    class Scenario {
+    class Scenario
+    {
 
     public:
         // Carry out any initializations like node creation, sensor client creation etc
@@ -35,4 +36,4 @@ namespace ketu::scenarios
 
 } // namespace ketu::scenarios
 
-#endif //SCENARIOS_H
+#endif // SCENARIOS_H

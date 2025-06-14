@@ -1,8 +1,8 @@
 #ifndef NODE_H
 #define NODE_H
 
-#include <string>
 #include <functional>
+#include <string>
 
 #include "../communication/communication_client.h"
 #include "../communication/interfaces.h"
@@ -11,13 +11,11 @@
 namespace ketu::objects
 {
 
-    class Node : public ketu:: communication::Communicable {
+    class Node : public ketu::communication::Communicable
+    {
     public:
-        explicit Node(
-            const std::string& nodeId,
-            const ketu::sensing::SensingClient* sensing_client,
-            ketu::communication::CommunicationClient* communication_client
-        );
+        explicit Node(const std::string& nodeId, const ketu::sensing::SensingClient* sensing_client,
+                      ketu::communication::CommunicationClient* communication_client);
 
         // Returns the unique id of the node.
         const std::string& getId() const;
@@ -29,7 +27,6 @@ namespace ketu::objects
         void onMessage(const ketu::communication::MessageType& message_type) override;
 
     private:
-
         void onNodeMove_(const ketu::communication::MessageType& message_type);
 
         void onNodeAnneal_();

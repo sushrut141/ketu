@@ -1,9 +1,9 @@
 #include "random_nodes.h"
 
-#include <iostream>
-#include <valarray>
 #include <cstdlib>
 #include <functional>
+#include <iostream>
+#include <valarray>
 
 #include "../communication/interfaces.h"
 
@@ -18,8 +18,7 @@ namespace ketu::scenarios
         return std::unique_ptr<RandomNodes>(new RandomNodes(std::move(world)));
     }
 
-    RandomNodes::RandomNodes(std::unique_ptr<ketu::world::World> world)
-        : Scenario(std::move(world))
+    RandomNodes::RandomNodes(std::unique_ptr<ketu::world::World> world) : Scenario(std::move(world))
     {
         this->sensing_client_ = std::make_unique<ketu::sensing::SensingClient>(this->world_.get());
         this->communication_client_ = std::make_unique<ketu::communication::CommunicationClient>(this->world_.get());
@@ -27,8 +26,10 @@ namespace ketu::scenarios
 
     void RandomNodes::setup()
     {
-        auto node = std::make_unique<ketu::objects::Node>("sphere_1", sensing_client_.get(), communication_client_.get());
-        std::function<void(std::string,ketu::telemetry::Position)> nodeUpdateCallback = std::bind(&RandomNodes::onNodeUpdated, this, std::placeholders::_1, std::placeholders::_2);
+        auto node =
+            std::make_unique<ketu::objects::Node>("sphere_1", sensing_client_.get(), communication_client_.get());
+        std::function<void(std::string, ketu::telemetry::Position)> nodeUpdateCallback =
+            std::bind(&RandomNodes::onNodeUpdated, this, std::placeholders::_1, std::placeholders::_2);
         node->setOnNodeUpdated(nodeUpdateCallback);
 
         ketu::telemetry::Position position(1.0, 1.0, 0.5);
@@ -46,10 +47,12 @@ namespace ketu::scenarios
             if (randomNumber < 0.3)
             {
                 communication_client_->sendMessage(nodeId, ketu::communication::MessageType::MOVE_X);
-            } else if (randomNumber < 0.6)
+            }
+            else if (randomNumber < 0.6)
             {
                 communication_client_->sendMessage(nodeId, ketu::communication::MessageType::MOVE_Y);
-            } else
+            }
+            else
             {
                 communication_client_->sendMessage(nodeId, ketu::communication::MessageType::MOVE_Z);
             }
@@ -61,7 +64,8 @@ namespace ketu::scenarios
         const auto& position = world_->getNodePosition(nodeId);
         auto updatedPosition = position + positionDiff;
 
-        std::cout << "RandomNodes::onTick() for frame " << updatedPosition.getX()  << " " << updatedPosition.getY() << " " << updatedPosition.getZ() << std::endl;
+        std::cout << "RandomNodes::onTick() for frame " << updatedPosition.getX() << " " << updatedPosition.getY()
+                  << " " << updatedPosition.getZ() << std::endl;
 
         world_->updateNode(nodeId, updatedPosition);
     }

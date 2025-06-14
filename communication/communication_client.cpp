@@ -4,12 +4,10 @@
 
 namespace ketu::communication
 {
-    CommunicationClient::CommunicationClient(const ketu::world::World* world)
-    {
-        this->world_ = world;
-    }
+    CommunicationClient::CommunicationClient(const ketu::world::World* world) { this->world_ = world; }
 
-    void CommunicationClient::registerNode(const std::string& nodeId, Communicable* node) {
+    void CommunicationClient::registerNode(const std::string& nodeId, Communicable* node)
+    {
         nodes_.insert(std::make_pair(nodeId, node));
     }
 
@@ -24,7 +22,6 @@ namespace ketu::communication
         }
         return false;
     }
-
 
 
 } // namespace ketu::communication

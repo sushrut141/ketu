@@ -2,17 +2,18 @@
 #define RANDOM_NODES_H
 #include <memory>
 
-#include "scenario.h"
 #include "../objects/node.h"
+#include "scenario.h"
 
 namespace ketu::scenarios
 {
-    class RandomNodes: public Scenario
+    class RandomNodes : public Scenario
     {
     public:
         static std::unique_ptr<RandomNodes> create();
 
         void setup();
+
     private:
         RandomNodes(std::unique_ptr<ketu::world::World> world);
 
@@ -27,4 +28,4 @@ namespace ketu::scenarios
     };
 
 } // namespace ketu::scenarios
-#endif //RANDOM_NODES_H
+#endif // RANDOM_NODES_H

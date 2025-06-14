@@ -10,7 +10,8 @@
 namespace ketu::communication
 {
     // Encapsulates communication with other nodes in the world.
-    class CommunicationClient {
+    class CommunicationClient
+    {
     public:
         explicit CommunicationClient(const ketu::world::World* world);
 
@@ -26,4 +27,4 @@ namespace ketu::communication
 
 } // namespace ketu::communication
 
-#endif //COMMUNICATION_H
+#endif // COMMUNICATION_H

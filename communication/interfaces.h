@@ -28,11 +28,9 @@ namespace ketu::communication
         // Method invoked on message received.
         virtual void onMessage(const MessageType& message_type) = 0;
 
-        virtual ~Communicable() {
-            std::cout << "Communicable destroyed." << std::endl;
-        }
+        virtual ~Communicable() { std::cout << "Communicable destroyed." << std::endl; }
     };
 
 } // namespace ketu::communication
 
-#endif //INTEFACES_H
+#endif // INTEFACES_H
