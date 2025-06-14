@@ -13,6 +13,7 @@ namespace ketu::telemetry
         double getX() const;
         double getY() const;
         double getZ() const;
+
     private:
         double x_;
         double y_;

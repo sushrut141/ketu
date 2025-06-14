@@ -1,5 +1,10 @@
 # Define the library target for your features
-add_library(Communication SHARED communication_client.cpp communication_client.h)
+add_library(
+        Communication SHARED
+        communication_client.cpp
+        communication_client.h
+        types.h
+)
 
 # Specify its own include directories if it has public headers
 target_include_directories(Communication PRIVATE
