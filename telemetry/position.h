@@ -10,6 +10,10 @@ namespace ketu::telemetry
 
         Position();
 
+        static Position from(double x, double y, double z);
+
+        Position operator+(const Position& other) const;
+
         double getX() const;
         double getY() const;
         double getZ() const;

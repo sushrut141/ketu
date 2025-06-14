@@ -6,13 +6,17 @@ namespace ketu::objects
     constexpr double MOVEMENT_STEP = 0.001;
 
     Node::Node(
-        const std::string& node_id,
+        const std::string& nodeId,
         const ketu::sensing::SensingClient* sensing_client,
-        const ketu::communication::CommunicationClient* communication_client)
-            : node_id_(node_id),
+        ketu::communication::CommunicationClient* communication_client)
+            :
+                Communicable(),
+                node_id_(nodeId),
                 sensing_client_(sensing_client),
-                communication_client_(communication_client)
+                communication_client_(communication_client),
+                onNodeUpdated_([](std::string nodeId, ketu::telemetry::Position pos) {})
     {
+        communication_client_->registerNode(nodeId, this);
     }
 
     const std::string& Node::getId() const
@@ -20,7 +24,7 @@ namespace ketu::objects
         return this->node_id_;
     }
 
-    void Node::setOnNodeUpdated(const std::function<void(ketu::telemetry::Position)>& callback)
+    void Node::setOnNodeUpdated(const std::function<void(std::string, ketu::telemetry::Position)>& callback)
     {
         onNodeUpdated_ = callback;
     }
@@ -48,15 +52,17 @@ namespace ketu::objects
         switch (message_type)
         {
         case ketu::communication::MessageType::MOVE_X:
-            position = ketu::telemetry::Position(MOVEMENT_STEP, 0.0, 0.0);
+            position = ketu::telemetry::Position::from(MOVEMENT_STEP, 0.0, 0.0);
+            break;
         case ketu::communication::MessageType::MOVE_Y:
-            position = ketu::telemetry::Position(0.0, MOVEMENT_STEP, 0.0);
+            position = ketu::telemetry::Position::from(0.0, MOVEMENT_STEP, 0.0);
+            break;
         case ketu::communication::MessageType::MOVE_Z:
-            position = ketu::telemetry::Position(0.0, 0.0, MOVEMENT_STEP);
+            position = ketu::telemetry::Position::from(0.0, 0.0, MOVEMENT_STEP);
+            break;
         default:
-            assert(false, "Unknown message type encountered");
         }
-        onNodeUpdated_(position);
+        onNodeUpdated_(node_id_, position);
     }
 
     void Node::onNodeAnneal_()

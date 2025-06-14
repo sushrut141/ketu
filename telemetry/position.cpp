@@ -14,4 +14,15 @@ namespace ketu::telemetry
 
     double Position::getZ() const { return z_; }
 
+    Position Position::from(double x, double y, double z)
+    {
+        Position p(x, y, z);
+        return p;
+    }
+
+    Position Position::operator+(const Position& rhs) const
+    {
+        return Position(x_ + rhs.x_, y_ + rhs.y_, z_ + rhs.z_);
+    }
+
 } // namespace ketu::telemetry

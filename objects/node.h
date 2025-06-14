@@ -5,28 +5,28 @@
 #include <functional>
 
 #include "../communication/communication_client.h"
-#include "../communication/types.h"
+#include "../communication/interfaces.h"
 #include "../sensing/sensing_client.h"
 
 namespace ketu::objects
 {
 
-    class Node {
+    class Node : public ketu:: communication::Communicable {
     public:
         explicit Node(
-            const std::string& node_id,
+            const std::string& nodeId,
             const ketu::sensing::SensingClient* sensing_client,
-            const ketu::communication::CommunicationClient* communication_client
+            ketu::communication::CommunicationClient* communication_client
         );
 
         // Returns the unique id of the node.
         const std::string& getId() const;
 
         // Invokes the callback with diff in the position of the node wrt to North.
-        void setOnNodeUpdated(const std::function<void(ketu::telemetry::Position)>& callback);
+        void setOnNodeUpdated(const std::function<void(std::string, ketu::telemetry::Position)>& callback);
 
         // Commands the node to carry out a particular action.
-        void onMessage(const ketu::communication::MessageType& message_type);
+        void onMessage(const ketu::communication::MessageType& message_type) override;
 
     private:
 
@@ -36,9 +36,9 @@ namespace ketu::objects
 
         const std::string node_id_;
         const ketu::sensing::SensingClient* sensing_client_;
-        const ketu::communication::CommunicationClient* communication_client_;
+        ketu::communication::CommunicationClient* communication_client_;
 
-        std::function<void(ketu::telemetry::Position)> onNodeUpdated_;
+        std::function<void(std::string, ketu::telemetry::Position)> onNodeUpdated_;
     };
 
 } // namespace ketu::objects

@@ -7,9 +7,13 @@ target_include_directories(Objects PRIVATE
         $<INSTALL_INTERFACE:include>
         Sensing
         Communication
+        CommunicationInterface
+        Telemetry
 )
 
 target_link_libraries(Objects PRIVATE
         Sensing
         Communication
+        CommunicationInterface
+        Telemetry
 )

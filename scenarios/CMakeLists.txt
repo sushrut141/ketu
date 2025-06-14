@@ -20,6 +20,7 @@ target_include_directories(Scenarios PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> # For local build within the project
         ${raylib_INCLUDE_DIRS}
         ${raylib_INCLUDE_DIRS}/raylib
+        CommunicationInterface
 )
 
 target_link_libraries(Scenarios PRIVATE
@@ -29,4 +30,5 @@ target_link_libraries(Scenarios PRIVATE
         Objects
         Sensing
         Communication
+        CommunicationInterface
 )
