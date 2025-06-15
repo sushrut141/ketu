@@ -5,40 +5,30 @@
 namespace ketu::formation
 {
 
-    const std::vector<ketu::telemetry::Position> GRID_RELATIVE_POSITIONS = {
-        // Top.
-        ketu::telemetry::Position::from(0.0, 0.0, 1.0),
-        // Bottom.
-        ketu::telemetry::Position::from(0.0, 0.0, -1.0),
-        // Left.
-        ketu::telemetry::Position::from(-1.0, 0.0, 0.0),
-        // Right.
-        ketu::telemetry::Position::from(1.0, 0.0, 0.0),
-        // Ahead.
-        ketu::telemetry::Position::from(0.0, 1.0, 0.0),
-        // Backward.
-        ketu::telemetry::Position::from(0.0, -1.0, 0.0),
-    };
-
-    GridFormationCoordinator::GridFormationCoordinator( const ketu::world::World* world)
-        : FormationCoordinator(), world_()
+    GridFormationCoordinator::GridFormationCoordinator(const ketu::world::World* world) :
+        FormationCoordinator(), world_(world)
     {
         frozen_nodes_ = {};
     }
 
-    bool GridFormationCoordinator::isFormed()
+    int GridFormationCoordinator::maxConnectivity() {}
+
+    bool GridFormationCoordinator::isNodeLocallyFormed(const std::string& nodeId) {}
+
+    std::vector<std::string> GridFormationCoordinator::getLocalNeighbors(const std::string& nodeId) {}
+
+    void GridFormationCoordinator::setLocalNeighbors(const std::string& nodeId,
+                                                     const std::vector<std::string> neighbors)
     {
-        return world_->getNodePositions().size() == frozen_nodes_.size();
     }
 
-    const std::unordered_map<std::string, ketu::communication::MessageType> GridFormationCoordinator::computeAlignment(
-        const std::vector<std::pair<std::string, std::pair<double, ketu::telemetry::Position>>>& nodes)
+    bool GridFormationCoordinator::isNodeFrozen(const std::string& nodeId) {}
+
+    bool GridFormationCoordinator::isFormationComplete() {}
+
+    const NodeMessages GridFormationCoordinator::align(const std::string& nodeId,
+                                                       const NodePositions& relativeNodePositions)
     {
-
-
     }
-
-
-
 
 } // namespace ketu::formation

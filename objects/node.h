@@ -7,7 +7,6 @@
 #include "../communication/communication_client.h"
 #include "../communication/interfaces.h"
 #include "../formation/formation_coordinator.h"
-#include "../formation/interface.h"
 #include "../sensing/sensing_client.h"
 
 
@@ -18,7 +17,8 @@ namespace ketu::objects
     {
     public:
         explicit Node(
-            const std::string& nodeId, const ketu::sensing::SensingClient* sensing_client,
+            const std::string& nodeId,
+            ketu::sensing::SensingClient* sensing_client,
             ketu::communication::CommunicationClient* communication_client,
             ketu::formation::FormationCoordinator* formationCoordinator);
 
@@ -37,7 +37,7 @@ namespace ketu::objects
         void onNodeAnneal_();
 
         const std::string node_id_;
-        const ketu::sensing::SensingClient* sensing_client_;
+        ketu::sensing::SensingClient* sensing_client_;
         ketu::communication::CommunicationClient* communication_client_;
         ketu::formation::FormationCoordinator* formationCoordinator_;
 

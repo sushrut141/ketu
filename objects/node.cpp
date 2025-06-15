@@ -1,11 +1,12 @@
 #include "node.h"
-#include <cassert>
+
+#include <algorithm>
 
 namespace ketu::objects
 {
     constexpr double MOVEMENT_STEP = 0.001;
 
-    Node::Node(const std::string& nodeId, const ketu::sensing::SensingClient* sensing_client,
+    Node::Node(const std::string& nodeId, ketu::sensing::SensingClient* sensing_client,
                ketu::communication::CommunicationClient* communication_client,
                ketu::formation::FormationCoordinator* formationCoordinator) :
         Communicable(), node_id_(nodeId), sensing_client_(sensing_client), communication_client_(communication_client),
@@ -58,7 +59,74 @@ namespace ketu::objects
         onNodeUpdated_(node_id_, position);
     }
 
-    void Node::onNodeAnneal_() {}
+    void Node::onNodeAnneal_()
+    {
+        auto neighbors = formationCoordinator_->getLocalNeighbors(getId());
+        // Assign local neighbors if not assigned.
+        if (neighbors.empty())
+        {
+            auto nearestNodes =
+                sensing_client_->getKNearestNeighbors(getId(), formationCoordinator_->maxConnectivity());
+            // Remove nodes already part of some other node's formation.
+            for (auto it = nearestNodes.begin(); it != nearestNodes.end();)
+            {
+                if (formationCoordinator_->isNodeFrozen(it->first))
+                {
+                    it = nearestNodes.erase(it);
+                }
+                else
+                {
+                    ++it;
+                }
+            }
+            std::vector<std::string> neighborIds;
+            for (auto it = nearestNodes.begin(); it != nearestNodes.end(); ++it)
+            {
+                neighborIds.push_back(it->first);
+            }
+            formationCoordinator_->setLocalNeighbors(getId(), neighborIds);
+
+            auto neighborMessages = formationCoordinator_->align(getId(), nearestNodes);
+            for (const auto& neighbor : neighborMessages)
+            {
+                communication_client_->sendMessage(neighbor.first, neighbor.second);
+            }
+        }
+        else
+        {
+            auto nearestNodes =
+                sensing_client_->getKNearestNeighbors(getId(), formationCoordinator_->maxConnectivity());
+            // Remove nodes already part of some other node's formation.
+            for (auto it = nearestNodes.begin(); it != nearestNodes.end();)
+            {
+                bool isNodeNotAssignedNeighbor =
+                    std::find(neighbors.begin(), neighbors.end(), it->first) == neighbors.end();
+                // Ignore nearby nodes that aren't assigned to this local formation.
+                if (
+                    formationCoordinator_->isNodeFrozen(it->first) ||
+                    isNodeNotAssignedNeighbor
+                )
+                {
+                    it = nearestNodes.erase(it);
+                }
+                else
+                {
+                    ++it;
+                }
+            }
+            std::vector<std::string> neighborIds;
+            for (auto it = nearestNodes.begin(); it != nearestNodes.end(); ++it)
+            {
+                neighborIds.push_back(it->first);
+            }
+
+            auto neighborMessages = formationCoordinator_->align(getId(), nearestNodes);
+            for (const auto& neighbor : neighborMessages)
+            {
+                communication_client_->sendMessage(neighbor.first, neighbor.second);
+            }
+        }
+    }
 
 
 } // namespace ketu::objects

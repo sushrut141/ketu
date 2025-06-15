@@ -8,25 +8,32 @@
 
 namespace ketu::formation
 {
-    class GridFormationCoordinator : public FormationCoordinator {
+
+    class GridFormationCoordinator : public FormationCoordinator
+    {
 
     public:
         GridFormationCoordinator(const ketu::world::World* world);
 
-        // Specifies whether supplied nodes are in formation.
-        bool isFormed() override;
+        int maxConnectivity() override;
 
-        // Move the available nodes in vicinity of source node into formation.
-        // The method accepts a map of nodeId and a pair of (distance, relativePosition)
-        // to the source node.
-        const std::unordered_map<std::string, ketu::communication::MessageType>
-        computeAlignment(const std::vector<std::pair<std::string, std::pair<double, ketu::telemetry::Position>>>& nodes) override;
+        bool isNodeLocallyFormed(const std::string& nodeId) override;
+
+        std::vector<std::string> getLocalNeighbors(const std::string& nodeId) override;
+
+        void setLocalNeighbors(const std::string& nodeId, const std::vector<std::string> neighbors) override;
+
+        bool isNodeFrozen(const std::string& nodeId) override;
+
+        bool isFormationComplete() override;
+
+        const NodeMessages align(const std::string& nodeId, const NodePositions& relativeNodePositions) override;
 
     private:
         const ketu::world::World* world_;
         std::unordered_set<std::string> frozen_nodes_;
     };
 
-}  // ketu::formation
+} // namespace ketu::formation
 
-#endif //GRID_FORMATIONCOORDINATOR_H
+#endif // GRID_FORMATIONCOORDINATOR_H

@@ -10,7 +10,7 @@ namespace ketu::sensing
 
     SensingClient::SensingClient(const ketu::world::World* world) { this->world_ = world; }
 
-    const std::vector<std::pair<std::string, std::pair<double, ketu::telemetry::Position>>>
+    std::unordered_map<std::string, telemetry::Position>
     SensingClient::getKNearestNeighbors(const std::string sourceNodeId, const int k)
     {
         const ketu::telemetry::Position& sourcePosition = world_->getNodePosition(sourceNodeId);
@@ -38,20 +38,17 @@ namespace ketu::sensing
             }
         }
 
-        std::vector<std::pair<std::string, std::pair<double, ketu::telemetry::Position>>> result;
-        result.reserve(max_heap.size());
-
+        std::unordered_map<std::string, telemetry::Position> targetPositions;
         while (!max_heap.empty())
         {
             auto nearestNodeId = max_heap.top().second;
             auto nearestPosition = neighbors.at(nearestNodeId);
             auto relativePosition = nearestPosition - sourcePosition;
-            result.push_back({max_heap.top().second, {max_heap.top().first, relativePosition}});
+            targetPositions.insert({nearestNodeId, relativePosition});
             max_heap.pop();
         }
-        std::reverse(result.begin(), result.end());
 
-        return result;
+        return targetPositions;
     }
 
 

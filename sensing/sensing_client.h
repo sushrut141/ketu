@@ -1,7 +1,7 @@
 #ifndef SENSING_CLIENT_H
 #define SENSING_CLIENT_H
 
-#include <utility>
+#include  <unordered_map>
 
 #include "../world/world.h"
 
@@ -15,9 +15,9 @@ namespace ketu::sensing
     public:
         explicit SensingClient(const ketu::world::World* world);
 
-        // Returns the ids of the k nearest nodes along with distance and relative position w.r.t
-        // the source node.
-        const std::vector<std::pair<std::string, std::pair<double, ketu::telemetry::Position>>>
+        // Returns the k nearest neighbors and their relative positions w.r.t
+        // to the current node.
+        std::unordered_map<std::string, telemetry::Position>
             getKNearestNeighbors(const std::string sourceNodeId, const int k);
 
     private:
