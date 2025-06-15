@@ -23,6 +23,7 @@ namespace ketu::scenarios
 
         std::unique_ptr<ketu::sensing::SensingClient> sensing_client_;
         std::unique_ptr<ketu::communication::CommunicationClient> communication_client_;
+        std::unique_ptr<ketu::formation::FormationCoordinator> formationCoordinator_;
 
         std::vector<std::unique_ptr<ketu::objects::Node>> nodes_;
     };

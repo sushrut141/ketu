@@ -6,6 +6,7 @@
 #include <valarray>
 
 #include "../communication/interfaces.h"
+#include "../formation/grid_formation_coordinator.h"
 
 #include "../objects/node.h"
 
@@ -22,12 +23,18 @@ namespace ketu::scenarios
     {
         this->sensing_client_ = std::make_unique<ketu::sensing::SensingClient>(this->world_.get());
         this->communication_client_ = std::make_unique<ketu::communication::CommunicationClient>(this->world_.get());
+        this->formationCoordinator_ = std::make_unique<ketu::formation::GridFormationCoordinator>(world_.get());
     }
 
     void RandomNodes::setup()
     {
         auto node =
-            std::make_unique<ketu::objects::Node>("sphere_1", sensing_client_.get(), communication_client_.get());
+            std::make_unique<ketu::objects::Node>(
+                "sphere_1",
+                sensing_client_.get(),
+                communication_client_.get(),
+                formationCoordinator_.get()
+            );
         std::function<void(std::string, ketu::telemetry::Position)> nodeUpdateCallback =
             std::bind(&RandomNodes::onNodeUpdated, this, std::placeholders::_1, std::placeholders::_2);
         node->setOnNodeUpdated(nodeUpdateCallback);

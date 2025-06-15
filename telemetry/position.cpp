@@ -18,6 +18,14 @@ namespace ketu::telemetry
         return p;
     }
 
-    Position Position::operator+(const Position& rhs) const { return Position(x_ + rhs.x_, y_ + rhs.y_, z_ + rhs.z_); }
+    Position Position::operator+(const Position& rhs) const
+    {
+        return Position(x_ + rhs.x_, y_ + rhs.y_, z_ + rhs.z_);
+    }
+
+    Position Position::operator-(const Position& rhs) const
+    {
+        return Position(x_ - rhs.x_, y_ - rhs.y_, z_ - rhs.z_);
+    }
 
 } // namespace ketu::telemetry

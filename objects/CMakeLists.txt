@@ -9,6 +9,7 @@ target_include_directories(Objects PRIVATE
         Communication
         CommunicationInterface
         Telemetry
+        Formation
 )
 
 target_link_libraries(Objects PRIVATE
@@ -16,4 +17,5 @@ target_link_libraries(Objects PRIVATE
         Communication
         CommunicationInterface
         Telemetry
+        Formation
 )

@@ -15,7 +15,10 @@ namespace ketu::sensing
     public:
         explicit SensingClient(const ketu::world::World* world);
 
-        const std::vector<std::pair<std::string, double>>& getKNearestNeighbors(const std::string sourceNodeId, const int k);
+        // Returns the ids of the k nearest nodes along with distance and relative position w.r.t
+        // the source node.
+        const std::vector<std::pair<std::string, std::pair<double, ketu::telemetry::Position>>>
+            getKNearestNeighbors(const std::string sourceNodeId, const int k);
 
     private:
         const ketu::world::World* world_;

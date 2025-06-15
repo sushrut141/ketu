@@ -6,8 +6,10 @@ namespace ketu::objects
     constexpr double MOVEMENT_STEP = 0.001;
 
     Node::Node(const std::string& nodeId, const ketu::sensing::SensingClient* sensing_client,
-               ketu::communication::CommunicationClient* communication_client) :
+               ketu::communication::CommunicationClient* communication_client,
+               ketu::formation::FormationCoordinator* formationCoordinator) :
         Communicable(), node_id_(nodeId), sensing_client_(sensing_client), communication_client_(communication_client),
+        formationCoordinator_(formationCoordinator),
         onNodeUpdated_([](std::string nodeId, ketu::telemetry::Position pos) {})
     {
         communication_client_->registerNode(nodeId, this);
@@ -56,10 +58,7 @@ namespace ketu::objects
         onNodeUpdated_(node_id_, position);
     }
 
-    void Node::onNodeAnneal_()
-    {
-        
-    }
+    void Node::onNodeAnneal_() {}
 
 
 } // namespace ketu::objects

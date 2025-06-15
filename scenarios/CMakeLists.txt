@@ -21,6 +21,7 @@ target_include_directories(Scenarios PUBLIC
         ${raylib_INCLUDE_DIRS}
         ${raylib_INCLUDE_DIRS}/raylib
         CommunicationInterface
+        FormationCoordinator
 )
 
 target_link_libraries(Scenarios PRIVATE
@@ -31,4 +32,5 @@ target_link_libraries(Scenarios PRIVATE
         Sensing
         Communication
         CommunicationInterface
+        FormationCoordinator
 )

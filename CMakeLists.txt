@@ -13,6 +13,7 @@ add_subdirectory(sensing)
 add_subdirectory(communication)
 add_subdirectory(telemetry)
 add_subdirectory(scenarios)
+add_subdirectory(formation)
 
 # Define your executable
 add_executable(main main.cpp)

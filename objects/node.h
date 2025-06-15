@@ -6,7 +6,10 @@
 
 #include "../communication/communication_client.h"
 #include "../communication/interfaces.h"
+#include "../formation/formation_coordinator.h"
+#include "../formation/interface.h"
 #include "../sensing/sensing_client.h"
+
 
 namespace ketu::objects
 {
@@ -14,8 +17,10 @@ namespace ketu::objects
     class Node : public ketu::communication::Communicable
     {
     public:
-        explicit Node(const std::string& nodeId, const ketu::sensing::SensingClient* sensing_client,
-                      ketu::communication::CommunicationClient* communication_client);
+        explicit Node(
+            const std::string& nodeId, const ketu::sensing::SensingClient* sensing_client,
+            ketu::communication::CommunicationClient* communication_client,
+            ketu::formation::FormationCoordinator* formationCoordinator);
 
         // Returns the unique id of the node.
         const std::string& getId() const;
@@ -34,6 +39,7 @@ namespace ketu::objects
         const std::string node_id_;
         const ketu::sensing::SensingClient* sensing_client_;
         ketu::communication::CommunicationClient* communication_client_;
+        ketu::formation::FormationCoordinator* formationCoordinator_;
 
         std::function<void(std::string, ketu::telemetry::Position)> onNodeUpdated_;
     };
