@@ -56,7 +56,10 @@ namespace ketu::objects
         onNodeUpdated_(node_id_, position);
     }
 
-    void Node::onNodeAnneal_() {}
+    void Node::onNodeAnneal_()
+    {
+        
+    }
 
 
 } // namespace ketu::objects

@@ -6,6 +6,11 @@ target_include_directories(Sensing PRIVATE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         $<INSTALL_INTERFACE:include>
         World
+        Telemetry
 )
 
-target_link_libraries(Sensing PRIVATE World)
+target_link_libraries(
+        Sensing PRIVATE
+        World
+        Telemetry
+)

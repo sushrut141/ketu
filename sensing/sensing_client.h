@@ -1,6 +1,8 @@
 #ifndef SENSING_CLIENT_H
 #define SENSING_CLIENT_H
 
+#include <utility>
+
 #include "../world/world.h"
 
 namespace ketu::sensing
@@ -12,6 +14,8 @@ namespace ketu::sensing
     {
     public:
         explicit SensingClient(const ketu::world::World* world);
+
+        const std::vector<std::pair<std::string, double>>& getKNearestNeighbors(const std::string sourceNodeId, const int k);
 
     private:
         const ketu::world::World* world_;

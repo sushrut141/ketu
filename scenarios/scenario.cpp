@@ -5,8 +5,6 @@
 
 namespace ketu::scenarios
 {
-    constexpr int SCREEN_WIDTH = 1280;
-    constexpr int SCREEN_HEIGHT = 720;
 
     Scenario::Scenario(std::unique_ptr<ketu::world::World> world)
     {
@@ -16,7 +14,7 @@ namespace ketu::scenarios
 
     void Scenario::run()
     {
-        InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Raylib Sphere Renderer with Mouse Pan");
+        InitWindow(GetScreenWidth(), GetScreenHeight(), "Ketu");
 
         // Define the camera parameters (position, target, up, field of view)
         Camera camera = {0}; // Initialize camera struct to zero
