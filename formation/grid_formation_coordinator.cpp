@@ -6,7 +6,7 @@
 
 namespace ketu::formation
 {
-    constexpr double MIN_DISTANCE = 0.5f;
+    constexpr double MIN_DISTANCE = 2.0f;
 
     static ketu::telemetry::Position TOP = ketu::telemetry::Position::from(0.0, 0.0, MIN_DISTANCE);
     static ketu::telemetry::Position BOTTOM = ketu::telemetry::Position::from(0.0, 0.0, -MIN_DISTANCE);
