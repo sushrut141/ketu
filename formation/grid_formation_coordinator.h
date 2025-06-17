@@ -1,6 +1,7 @@
-#ifndef GRID_FORMATIONCOORDINATOR_H
-#define GRID_FORMATIONCOORDINATOR_H
+#ifndef GRID_FORMATION_COORDINATOR_H
+#define GRID_FORMATION_COORDINATOR_H
 
+#include <unordered_map>
 #include <unordered_set>
 
 #include "../world/world.h"
@@ -31,9 +32,10 @@ namespace ketu::formation
 
     private:
         const ketu::world::World* world_;
-        std::unordered_set<std::string> frozen_nodes_;
+        std::unordered_map<std::string, std::unordered_map<std::string, ketu::telemetry::Position*>> connectivity_;
+        std::unordered_set<std::string> frozenNodes_;
     };
 
 } // namespace ketu::formation
 
-#endif // GRID_FORMATIONCOORDINATOR_H
+#endif // GRID_FORMATION_COORDINATOR_H

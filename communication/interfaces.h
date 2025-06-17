@@ -11,14 +11,22 @@ namespace ketu::communication
     enum MessageType
     {
         UNSPECIFIED = 0,
-        // Move along X Axis wrt North.
-        MOVE_X = 1,
-        // Move along Y Axis wrt North.
-        MOVE_Y = 2,
-        // Move along Z Axis wrt North.
-        MOVE_Z = 3,
+        // Stop all movement.
+        STOP = 1,
+        // Move along positive X Axis wrt North.
+        MOVE_X_POSITIVE = 2,
+        // Move along negative X Axis wrt North.
+        MOVE_X_NEGATIVE = 3,
+        // Move along positive Y Axis wrt North.
+        MOVE_Y_POSITIVE = 4,
+        // Move along negative Y Axis wrt North.
+        MOVE_Y_NEGATIVE = 5,
+        // Move along positive Z Axis wrt North.
+        MOVE_Z_POSITIVE = 6,
+        // Move along positive Z Axis wrt North.
+        MOVE_Z_NEGATIVE = 7,
         // Attempt creating formations with surrounding nodes.
-        ANNEAL = 4
+        ANNEAL = 8
     };
 
     // Interface for all objects that use communication client to implement.

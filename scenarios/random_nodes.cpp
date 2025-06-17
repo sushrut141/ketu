@@ -28,13 +28,8 @@ namespace ketu::scenarios
 
     void RandomNodes::setup()
     {
-        auto node =
-            std::make_unique<ketu::objects::Node>(
-                "sphere_1",
-                sensing_client_.get(),
-                communication_client_.get(),
-                formationCoordinator_.get()
-            );
+        auto node = std::make_unique<ketu::objects::Node>("sphere_1", sensing_client_.get(),
+                                                          communication_client_.get(), formationCoordinator_.get());
         std::function<void(std::string, ketu::telemetry::Position)> nodeUpdateCallback =
             std::bind(&RandomNodes::onNodeUpdated, this, std::placeholders::_1, std::placeholders::_2);
         node->setOnNodeUpdated(nodeUpdateCallback);
@@ -53,15 +48,15 @@ namespace ketu::scenarios
             double randomNumber = static_cast<double>(rand()) / RAND_MAX;
             if (randomNumber < 0.3)
             {
-                communication_client_->sendMessage(nodeId, ketu::communication::MessageType::MOVE_X);
+                communication_client_->sendMessage(nodeId, ketu::communication::MessageType::MOVE_X_POSITIVE);
             }
             else if (randomNumber < 0.6)
             {
-                communication_client_->sendMessage(nodeId, ketu::communication::MessageType::MOVE_Y);
+                communication_client_->sendMessage(nodeId, ketu::communication::MessageType::MOVE_Y_POSITIVE);
             }
             else
             {
-                communication_client_->sendMessage(nodeId, ketu::communication::MessageType::MOVE_Z);
+                communication_client_->sendMessage(nodeId, ketu::communication::MessageType::MOVE_Z_POSITIVE);
             }
         }
     }

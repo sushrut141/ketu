@@ -16,11 +16,9 @@ namespace ketu::objects
     class Node : public ketu::communication::Communicable
     {
     public:
-        explicit Node(
-            const std::string& nodeId,
-            ketu::sensing::SensingClient* sensing_client,
-            ketu::communication::CommunicationClient* communication_client,
-            ketu::formation::FormationCoordinator* formationCoordinator);
+        explicit Node(const std::string& nodeId, ketu::sensing::SensingClient* sensing_client,
+                      ketu::communication::CommunicationClient* communication_client,
+                      ketu::formation::FormationCoordinator* formationCoordinator);
 
         // Returns the unique id of the node.
         const std::string& getId() const;

@@ -25,6 +25,7 @@ target_include_directories(FormationCoordinator PUBLIC
         World
         CommunicationInterface
         Telemetry
+        Planning
 )
 
 target_link_libraries(
@@ -38,4 +39,5 @@ target_link_libraries(
         World
         CommunicationInterface
         Telemetry
+        Planning
 )

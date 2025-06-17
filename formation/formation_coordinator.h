@@ -17,14 +17,13 @@ namespace ketu::formation
     {
 
     public:
-
         virtual ~FormationCoordinator() {}
 
         // Specifies the maximum number of edges for each node in the formation.
         // Can be used to identify how many neighbors need to be brought into formation.
         virtual int maxConnectivity() = 0;
 
-        // Specifies whether the current node and all it's nright bors are in formation.
+        // Specifies whether the current node and all it's neighbors are in formation.
         virtual bool isNodeLocallyFormed(const std::string& nodeId) = 0;
 
         // Get the nodes assigned to the local formation around a node.

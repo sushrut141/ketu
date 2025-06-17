@@ -30,10 +30,16 @@ namespace ketu::objects
         case ketu::communication::MessageType::ANNEAL:
             onNodeAnneal_();
             break;
-        case ketu::communication::MessageType::MOVE_X:
-        case ketu::communication::MessageType::MOVE_Y:
-        case ketu::communication::MessageType::MOVE_Z:
+        case ketu::communication::MessageType::MOVE_X_POSITIVE:
+        case ketu::communication::MessageType::MOVE_X_NEGATIVE:
+        case ketu::communication::MessageType::MOVE_Y_POSITIVE:
+        case ketu::communication::MessageType::MOVE_Y_NEGATIVE:
+        case ketu::communication::MessageType::MOVE_Z_POSITIVE:
+        case ketu::communication::MessageType::MOVE_Z_NEGATIVE:
             onNodeMove_(message_type);
+            break;
+        case ketu::communication::MessageType::STOP:
+        case ketu::communication::MessageType::UNSPECIFIED:
         default:
             break;
         }
@@ -45,16 +51,28 @@ namespace ketu::objects
         ketu::telemetry::Position position;
         switch (message_type)
         {
-        case ketu::communication::MessageType::MOVE_X:
+        case ketu::communication::MessageType::MOVE_X_POSITIVE:
             position = ketu::telemetry::Position::from(MOVEMENT_STEP, 0.0, 0.0);
             break;
-        case ketu::communication::MessageType::MOVE_Y:
+        case ketu::communication::MessageType::MOVE_X_NEGATIVE:
+            position = ketu::telemetry::Position::from(-MOVEMENT_STEP, 0.0, 0.0);
+            break;
+        case ketu::communication::MessageType::MOVE_Y_POSITIVE:
             position = ketu::telemetry::Position::from(0.0, MOVEMENT_STEP, 0.0);
             break;
-        case ketu::communication::MessageType::MOVE_Z:
+        case ketu::communication::MessageType::MOVE_Y_NEGATIVE:
+            position = ketu::telemetry::Position::from(0.0, -MOVEMENT_STEP, 0.0);
+            break;
+        case ketu::communication::MessageType::MOVE_Z_POSITIVE:
             position = ketu::telemetry::Position::from(0.0, 0.0, MOVEMENT_STEP);
             break;
+        case ketu::communication::MessageType::MOVE_Z_NEGATIVE:
+            position = ketu::telemetry::Position::from(0.0, 0.0, -MOVEMENT_STEP);
+            break;
+        case ketu::communication::MessageType::UNSPECIFIED:
+        case ketu::communication::MessageType::STOP:
         default:
+            break;
         }
         onNodeUpdated_(node_id_, position);
     }
@@ -102,10 +120,7 @@ namespace ketu::objects
                 bool isNodeNotAssignedNeighbor =
                     std::find(neighbors.begin(), neighbors.end(), it->first) == neighbors.end();
                 // Ignore nearby nodes that aren't assigned to this local formation.
-                if (
-                    formationCoordinator_->isNodeFrozen(it->first) ||
-                    isNodeNotAssignedNeighbor
-                )
+                if (formationCoordinator_->isNodeFrozen(it->first) || isNodeNotAssignedNeighbor)
                 {
                     it = nearestNodes.erase(it);
                 }
@@ -121,9 +136,9 @@ namespace ketu::objects
             }
 
             auto neighborMessages = formationCoordinator_->align(getId(), nearestNodes);
-            for (const auto& neighbor : neighborMessages)
+            for (const auto& neighborMessage : neighborMessages)
             {
-                communication_client_->sendMessage(neighbor.first, neighbor.second);
+                communication_client_->sendMessage(neighborMessage.first, neighborMessage.second);
             }
         }
     }
