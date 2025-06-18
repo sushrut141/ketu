@@ -10,7 +10,7 @@ namespace ketu::planning
                                           const ketu::telemetry::Position& target)
     {
         double distance = ketu::telemetry::distance(source, target);
-        if (distance < POSITION_ERROR)
+        if (distance <= POSITION_ERROR)
         {
             return ketu::communication::MessageType::STOP;
         }

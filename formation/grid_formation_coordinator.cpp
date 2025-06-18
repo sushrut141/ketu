@@ -11,7 +11,7 @@ namespace ketu::formation
     static ketu::telemetry::Position TOP = ketu::telemetry::Position::from(0.0, 0.0, MIN_DISTANCE);
     static ketu::telemetry::Position BOTTOM = ketu::telemetry::Position::from(0.0, 0.0, -MIN_DISTANCE);
     static ketu::telemetry::Position LEFT = ketu::telemetry::Position::from(-MIN_DISTANCE, 0.0, 0.0);
-    static ketu::telemetry::Position RIGHT = ketu::telemetry::Position::from(MIN_DISTANCE, 0.0, MIN_DISTANCE);
+    static ketu::telemetry::Position RIGHT = ketu::telemetry::Position::from(MIN_DISTANCE, 0.0, 0.0);
     static ketu::telemetry::Position FORWARD = ketu::telemetry::Position::from(0.0, MIN_DISTANCE, 0.0);
     static ketu::telemetry::Position BACKWARD = ketu::telemetry::Position::from(0.0, -MIN_DISTANCE, 0.0);
 

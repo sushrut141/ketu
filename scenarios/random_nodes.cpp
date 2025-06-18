@@ -29,23 +29,23 @@ namespace ketu::scenarios
     void RandomNodes::setup()
     {
         auto leader = std::make_unique<ketu::objects::Node>("leader", sensing_client_.get(),
-                                                          communication_client_.get(), formationCoordinator_.get());
+                                                            communication_client_.get(), formationCoordinator_.get());
         std::function<void(std::string, ketu::telemetry::Position)> nodeUpdateCallback =
-           std::bind(&RandomNodes::onNodeUpdated, this, std::placeholders::_1, std::placeholders::_2);
+            std::bind(&RandomNodes::onNodeUpdated, this, std::placeholders::_1, std::placeholders::_2);
         leader->setOnNodeUpdated(nodeUpdateCallback);
         world_->addNode(leader->getId(), ketu::telemetry::Position::from(1.0, 1.0, 0.5));
         nodes_.push_back(std::move(leader));
 
 
-        for (int i = 0; i < 6; i += 1)
+        for (int i = 0; i < 7; i += 1)
         {
             std::string followerId = "follower_" + std::to_string(i + 1);
             double randX = 5.0 * static_cast<double>(rand()) / RAND_MAX;
             double randY = 5.0 * static_cast<double>(rand()) / RAND_MAX;
             double randZ = 5.0 * static_cast<double>(rand()) / RAND_MAX;
 
-            auto follower = std::make_unique<ketu::objects::Node>(followerId, sensing_client_.get(),
-                                                          communication_client_.get(), formationCoordinator_.get());
+            auto follower = std::make_unique<ketu::objects::Node>(
+                followerId, sensing_client_.get(), communication_client_.get(), formationCoordinator_.get());
 
             follower->setOnNodeUpdated(nodeUpdateCallback);
             world_->addNode(follower->getId(), ketu::telemetry::Position::from(randX, randY, randZ));

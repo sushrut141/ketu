@@ -4,7 +4,7 @@
 
 namespace ketu::objects
 {
-    constexpr double MOVEMENT_STEP = 0.001;
+    constexpr double MOVEMENT_STEP = 0.005;
 
     Node::Node(const std::string& nodeId, ketu::sensing::SensingClient* sensing_client,
                ketu::communication::CommunicationClient* communication_client,
