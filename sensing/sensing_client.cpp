@@ -11,7 +11,7 @@ namespace ketu::sensing
     SensingClient::SensingClient(const ketu::world::World* world) { this->world_ = world; }
 
     std::unordered_map<std::string, telemetry::Position>
-    SensingClient::getKNearestNeighbors(const std::string sourceNodeId, const int k)
+    SensingClient::getKNearestNeighbors(const std::string sourceNodeId, const int k) const
     {
         const ketu::telemetry::Position& sourcePosition = world_->getNodePosition(sourceNodeId);
         const std::unordered_map<std::string, telemetry::Position>& neighbors = world_->getNodePositions();
@@ -51,5 +51,21 @@ namespace ketu::sensing
         return targetPositions;
     }
 
+    std::unordered_map<std::string, telemetry::Position> SensingClient::getDistanceToNodes(const std::string sourceNodeId,
+                                                                            const std::vector<std::string>& nodes) const
+    {
+        const ketu::telemetry::Position& sourcePosition = world_->getNodePosition(sourceNodeId);
+        const std::unordered_map<std::string, telemetry::Position>& nodePositions = world_->getNodePositions();
+        std::unordered_map<std::string, telemetry::Position> distances;
+
+        for (const auto& nodeId: nodes)
+        {
+            const auto& nodePosition = nodePositions.at(nodeId);
+            auto relativePosition = nodePosition - sourcePosition;
+            distances.insert({nodeId, relativePosition});
+        }
+
+        return distances;
+    }
 
 } // namespace ketu::sensing

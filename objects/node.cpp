@@ -118,20 +118,14 @@ namespace ketu::objects
         {
             std::cout<< "Annealing node " << getId() << " with all neighbors" << std::endl;
             auto nearestNodes =
-                sensing_client_->getKNearestNeighbors(getId(), formationCoordinator_->maxConnectivity());
+                sensing_client_->getDistanceToNodes(getId(), neighbors);
             std::unordered_map<std::string, ketu::telemetry::Position> frozenNeighbors;
-            // Remove nodes already part of some other node's formation.
             for (auto it = nearestNodes.begin(); it != nearestNodes.end();)
             {
-                bool isNodeNotAssignedNeighbor =
-                    std::find(neighbors.begin(), neighbors.end(), it->first) == neighbors.end();
-                if (formationCoordinator_->isNodeFrozen(it->first) || isNodeNotAssignedNeighbor)
+
+                if (formationCoordinator_->isNodeFrozen(it->first) )
                 {
-                    // Ignore nearby nodes that aren't assigned to this local formation.
-                    if (!isNodeNotAssignedNeighbor)
-                    {
-                        frozenNeighbors.insert({it->first, it->second});
-                    }
+                    frozenNeighbors.insert({it->first, it->second});
                     it = nearestNodes.erase(it);
                 }
                 else
