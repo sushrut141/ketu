@@ -16,15 +16,11 @@ add_subdirectory(scenarios)
 add_subdirectory(formation)
 add_subdirectory(planning)
 
-# Define your executable
+
 add_executable(main main.cpp)
 
-# Link the OpenSceneGraph libraries to your executable
 target_link_libraries(main
         Scenarios
 )
 
-# (Optional) Copy cessna.osg to the build directory for running
-# This assumes cessna.osg is in the same directory as CMakeLists.txt
-file(COPY "${CMAKE_SOURCE_DIR}/cessna.osg" DESTINATION "${CMAKE_BINARY_DIR}/")
 file(COPY "${CMAKE_SOURCE_DIR}/scenarios/raylib/shaders" DESTINATION "${CMAKE_BINARY_DIR}/")

@@ -6,6 +6,7 @@
 
 namespace ketu::scenarios
 {
+    constexpr int LIGHT_DISTANCE = 10.0;
 
     Scenario::Scenario(std::unique_ptr<ketu::world::World> world)
     {
@@ -16,6 +17,7 @@ namespace ketu::scenarios
     void Scenario::run()
     {
         SetConfigFlags(FLAG_MSAA_4X_HINT);
+        SetConfigFlags(FLAG_FULLSCREEN_MODE);
         InitWindow(GetScreenWidth(), GetScreenHeight(), "Ketu");
 
         // Define the camera parameters (position, target, up, field of view)
@@ -37,10 +39,10 @@ namespace ketu::scenarios
         SetShaderValue(shader, ambientLoc, (float[4]){ 0.1f, 0.1f, 0.1f, 1.0f }, SHADER_UNIFORM_VEC4);
 
         Light lights[MAX_LIGHTS] = { 0 };
-        lights[0] = CreateLight(LIGHT_POINT, (Vector3){ camera.position.x, camera.position.y, camera.position.z }, Vector3Zero(), WHITE, shader);
-        lights[1] = CreateLight(LIGHT_POINT, (Vector3){ 3, 0, 0 }, Vector3Zero(), WHITE, shader);
-        lights[2] = CreateLight(LIGHT_POINT, (Vector3){ 0, 1, 2 }, Vector3Zero(), WHITE, shader);
-        lights[3] = CreateLight(LIGHT_POINT, (Vector3){ 0, 10, 10 }, Vector3Zero(), WHITE, shader);
+        lights[0] = CreateLight(LIGHT_POINT, (Vector3){ LIGHT_DISTANCE, LIGHT_DISTANCE, LIGHT_DISTANCE }, Vector3Zero(), WHITE, shader);
+        lights[1] = CreateLight(LIGHT_POINT, (Vector3){ LIGHT_DISTANCE, LIGHT_DISTANCE, -LIGHT_DISTANCE }, Vector3Zero(), WHITE, shader);
+        lights[2] = CreateLight(LIGHT_POINT, (Vector3){ -LIGHT_DISTANCE, LIGHT_DISTANCE, LIGHT_DISTANCE }, Vector3Zero(), WHITE, shader);
+        lights[3] = CreateLight(LIGHT_POINT, (Vector3){ -LIGHT_DISTANCE, LIGHT_DISTANCE, -LIGHT_DISTANCE }, Vector3Zero(), WHITE, shader);
 
         while (!WindowShouldClose())
         {
