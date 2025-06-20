@@ -32,7 +32,7 @@ namespace ketu::formation
 
     private:
         const ketu::world::World* world_;
-        std::unordered_map<std::string, std::unordered_map<std::string, ketu::telemetry::Position*>> connectivity_;
+        std::unordered_map<std::string, std::unordered_map<std::string, int>> connectivity_;
         std::unordered_set<std::string> frozenNodes_;
     };
 

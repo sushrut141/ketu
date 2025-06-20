@@ -31,6 +31,8 @@ namespace ketu::formation
 
         // Assign nodes to be local neighbors of a node in the formation.
         // Use this to assign candidate positions to nodes to be moved to.
+        // Existing positions of node is maintained if called when called multiple times with
+        // the same set of nodes.
         virtual void setLocalNeighbors(const std::string& nodeId, const std::vector<std::string> neighbors) = 0;
 
         // Specifies whether node is already in formation.

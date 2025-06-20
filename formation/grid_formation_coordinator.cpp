@@ -1,6 +1,8 @@
 
 #include "grid_formation_coordinator.h"
 
+#include <unordered_set>
+
 #include "../planning/movement.h"
 #include "../telemetry/position.h"
 
@@ -34,7 +36,17 @@ namespace ketu::formation
         auto it = frozenNodes_.find(nodeId);
         if (it != frozenNodes_.end())
         {
-            for (const auto& neighbors : connectivity_)
+            bool nodeHasNeighbors = connectivity_.find(nodeId) != connectivity_.end();
+            if (!nodeHasNeighbors)
+            {
+                return false;
+            }
+            const auto& neighbors = connectivity_.at(nodeId);
+            if (neighbors.size() < maxConnectivity())
+            {
+                return false;
+            }
+            for (const auto& neighbors : neighbors)
             {
                 if (frozenNodes_.find(neighbors.first) == frozenNodes_.end())
                 {
@@ -66,36 +78,38 @@ namespace ketu::formation
         connectivity_.insert({nodeId, {}});
         auto it = connectivity_.find(nodeId);
         auto& existingNeighbors = it->second;
-        std::unordered_map<std::string, int> positionMapping;
-
-        if (existingNeighbors.size() < maxConnectivity())
+        std::unordered_set<int> availablePositions;
+        for (int i = 0; i < maxConnectivity(); ++i)
         {
-            auto diff = maxConnectivity() - existingNeighbors.size();
-            int i = existingNeighbors.size();
-            int j = 0;
-            while (i < maxConnectivity() && j < neighbors.size())
-            {
-                const std::string& newNodeId = neighbors.at(j);
-                if (existingNeighbors.find(newNodeId) == existingNeighbors.end())
-                {
-                    existingNeighbors.insert({newNodeId, POSITIONS[i]});
-                    positionMapping.insert({newNodeId, i});
-                    i += 1;
-                    j += 1;
-                }
-                else
-                {
-                    j += 1;
-                }
-            }
+            availablePositions.insert(i);
+        }
+        for (const auto& neighbor: existingNeighbors)
+        {
+            availablePositions.erase(neighbor.second);
         }
 
-        for (const auto& newNeighbor : positionMapping)
+        int neighborPtr = 0;
+        while (availablePositions.size() > 0 && neighborPtr < neighbors.size())
         {
-            int reversePositionIdx = REVERSE_POSITION_MAPPING[newNeighbor.second];
-            std::unordered_map<std::string, ketu::telemetry::Position*> reverseLinkage;
-            reverseLinkage.insert({nodeId, POSITIONS[reversePositionIdx]});
-            connectivity_.insert({newNeighbor.first, reverseLinkage});
+            std::string neighborNodeId = neighbors[neighborPtr];
+            if (existingNeighbors.find(neighborNodeId) != existingNeighbors.end())
+            {
+                neighborPtr += 1;
+                continue;
+            }
+            int positionIdx = *availablePositions.begin();
+            availablePositions.erase(positionIdx);
+
+            existingNeighbors.insert({neighborNodeId, positionIdx});
+            neighborPtr += 1;
+        }
+        for (const auto& neighbor: existingNeighbors)
+        {
+            int positionIdx = neighbor.second;
+            connectivity_.insert({neighbor.first, {}});
+            auto& reverseConnectivity = connectivity_.at(neighbor.first);
+
+            reverseConnectivity.insert({nodeId, REVERSE_POSITION_MAPPING[positionIdx]});
         }
     }
 
@@ -116,7 +130,8 @@ namespace ketu::formation
         {
             const std::string& neighborId = neighbor.first;
             const auto& sourcePosition = neighbor.second;
-            const auto& targetPosition = *targetPositionMap.at(neighborId);
+            int targetPositionIdx = targetPositionMap.at(neighborId);
+            const auto& targetPosition = *POSITIONS[targetPositionIdx];
             ketu::communication::MessageType message = ketu::planning::move(sourcePosition, targetPosition);
             messages.insert({neighborId, message});
             if (message == ketu::communication::MessageType::STOP)

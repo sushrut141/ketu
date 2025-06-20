@@ -37,7 +37,7 @@ namespace ketu::scenarios
         nodes_.push_back(std::move(leader));
 
 
-        for (int i = 0; i < 7; i += 1)
+        for (int i = 0; i < 16; i += 1)
         {
             std::string followerId = "follower_" + std::to_string(i + 1);
             double randX = 5.0 * static_cast<double>(rand()) / RAND_MAX;
@@ -63,10 +63,6 @@ namespace ketu::scenarios
     {
         const auto& position = world_->getNodePosition(nodeId);
         auto updatedPosition = position + positionDiff;
-
-        std::cout << "RandomNodes::onTick() for frame " << updatedPosition.getX() << " " << updatedPosition.getY()
-                  << " " << updatedPosition.getZ() << std::endl;
-
         world_->updateNode(nodeId, updatedPosition);
     }
 
