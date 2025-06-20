@@ -1,5 +1,7 @@
 # Ketu
 
+![ketu image](./images/formation.png)
+
 Lightweight framework to simulate drone formations.
 
 Ketu provider simple abstractions to mimick the sensors available on drones and create
