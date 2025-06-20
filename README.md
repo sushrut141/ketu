@@ -1,7 +1,5 @@
 # Ketu
 
-![ketu image](./images/formation.png)
-
 Lightweight framework to simulate drone formations.
 
 Ketu provider simple abstractions to mimick the sensors available on drones and create
@@ -13,6 +11,8 @@ Ketu provides a sandbox for people to quickly try out new drone formation techni
 without amount of large setup.
 For a more detailed simulation you can use ROS but to quickly try out
 a formation algorithm Ketu is your best bet.
+
+![ketu image](./images/formation.png)
 
 ## Key Concepts
 
