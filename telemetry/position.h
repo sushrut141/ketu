@@ -13,6 +13,8 @@ namespace ketu::telemetry
 
         static Position from(double x, double y, double z);
 
+        double magnitude();
+
         Position operator+(const Position& other) const;
 
         Position operator-(const Position& other) const;

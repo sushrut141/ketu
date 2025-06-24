@@ -1,5 +1,7 @@
 #include "position.h"
 
+#include <cmath>
+
 namespace ketu::telemetry
 {
     Position::Position(double x, double y, double z) : x_(x), y_(y), z_(z) {}
@@ -17,6 +19,12 @@ namespace ketu::telemetry
         Position p(x, y, z);
         return p;
     }
+
+    double Position::magnitude()
+    {
+        return sqrt((x_ * x_) + (y_ * y_) + (z_ * z_));
+    }
+
 
     Position Position::operator+(const Position& rhs) const { return Position(x_ + rhs.x_, y_ + rhs.y_, z_ + rhs.z_); }
 

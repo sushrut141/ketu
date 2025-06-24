@@ -8,6 +8,74 @@ namespace ketu::objects
 {
     constexpr double MOVEMENT_STEP = 0.005;
     constexpr int EXTRA_NODES_FETCHED = 12;
+    constexpr double NODE_CLEARANCE_AREA = 2.0;
+
+
+    namespace
+    {
+        ketu::telemetry::Position getPositionDiff(const ketu::communication::MessageType& message_type)
+        {
+            ketu::telemetry::Position position;
+            switch (message_type)
+            {
+            case ketu::communication::MessageType::MOVE_X_POSITIVE:
+                position = ketu::telemetry::Position::from(MOVEMENT_STEP, 0.0, 0.0);
+                break;
+            case ketu::communication::MessageType::MOVE_X_NEGATIVE:
+                position = ketu::telemetry::Position::from(-MOVEMENT_STEP, 0.0, 0.0);
+                break;
+            case ketu::communication::MessageType::MOVE_Y_POSITIVE:
+                position = ketu::telemetry::Position::from(0.0, MOVEMENT_STEP, 0.0);
+                break;
+            case ketu::communication::MessageType::MOVE_Y_NEGATIVE:
+                position = ketu::telemetry::Position::from(0.0, -MOVEMENT_STEP, 0.0);
+                break;
+            case ketu::communication::MessageType::MOVE_Z_POSITIVE:
+                position = ketu::telemetry::Position::from(0.0, 0.0, MOVEMENT_STEP);
+                break;
+            case ketu::communication::MessageType::MOVE_Z_NEGATIVE:
+                position = ketu::telemetry::Position::from(0.0, 0.0, -MOVEMENT_STEP);
+                break;
+            case ketu::communication::MessageType::UNSPECIFIED:
+            case ketu::communication::MessageType::STOP:
+            default:
+                break;
+            }
+            return position;
+        }
+
+        ketu::telemetry::Position getAlternatePosition(const ketu::communication::MessageType& message_type)
+        {
+            ketu::telemetry::Position position;
+            switch (message_type)
+            {
+            case ketu::communication::MessageType::MOVE_X_POSITIVE:
+                position = ketu::telemetry::Position::from(0.0, MOVEMENT_STEP, 0.0);
+                break;
+            case ketu::communication::MessageType::MOVE_X_NEGATIVE:
+                position = ketu::telemetry::Position::from(0.0, -MOVEMENT_STEP, 0.0);
+                break;
+            case ketu::communication::MessageType::MOVE_Y_POSITIVE:
+                position = ketu::telemetry::Position::from(MOVEMENT_STEP, 0.0, 0.0);
+                break;
+            case ketu::communication::MessageType::MOVE_Y_NEGATIVE:
+                position = ketu::telemetry::Position::from(-MOVEMENT_STEP, 0.0, 0.0);
+                break;
+            case ketu::communication::MessageType::MOVE_Z_POSITIVE:
+                position = ketu::telemetry::Position::from(MOVEMENT_STEP, 0.0, 0.0);
+                break;
+            case ketu::communication::MessageType::MOVE_Z_NEGATIVE:
+                position = ketu::telemetry::Position::from(-MOVEMENT_STEP, 0.0, -0.0);
+                break;
+            case ketu::communication::MessageType::UNSPECIFIED:
+            case ketu::communication::MessageType::STOP:
+            default:
+                break;
+            }
+            return position;
+        }
+
+    } // namespace
 
     Node::Node(const std::string& nodeId, ketu::sensing::SensingClient* sensing_client,
                ketu::communication::CommunicationClient* communication_client,
@@ -49,34 +117,29 @@ namespace ketu::objects
     }
 
 
-    void Node::onNodeMove_(const ketu::communication::MessageType& message_type)
+    void Node::onNodeMove_(const ketu::communication::MessageType& messageType)
     {
-        ketu::telemetry::Position position;
-        switch (message_type)
+        auto position = getPositionDiff(messageType);
+
+        auto nearestNeighbors = sensing_client_->getKNearestNeighbors(getId(), EXTRA_NODES_FETCHED);
+        bool isPositionOpen = true;
+        for (const auto& idDistancePair: nearestNeighbors)
         {
-        case ketu::communication::MessageType::MOVE_X_POSITIVE:
-            position = ketu::telemetry::Position::from(MOVEMENT_STEP, 0.0, 0.0);
-            break;
-        case ketu::communication::MessageType::MOVE_X_NEGATIVE:
-            position = ketu::telemetry::Position::from(-MOVEMENT_STEP, 0.0, 0.0);
-            break;
-        case ketu::communication::MessageType::MOVE_Y_POSITIVE:
-            position = ketu::telemetry::Position::from(0.0, MOVEMENT_STEP, 0.0);
-            break;
-        case ketu::communication::MessageType::MOVE_Y_NEGATIVE:
-            position = ketu::telemetry::Position::from(0.0, -MOVEMENT_STEP, 0.0);
-            break;
-        case ketu::communication::MessageType::MOVE_Z_POSITIVE:
-            position = ketu::telemetry::Position::from(0.0, 0.0, MOVEMENT_STEP);
-            break;
-        case ketu::communication::MessageType::MOVE_Z_NEGATIVE:
-            position = ketu::telemetry::Position::from(0.0, 0.0, -MOVEMENT_STEP);
-            break;
-        case ketu::communication::MessageType::UNSPECIFIED:
-        case ketu::communication::MessageType::STOP:
-        default:
-            break;
+            auto diff = idDistancePair.second - position;
+            double magnitude = diff.magnitude();
+            if (magnitude < NODE_CLEARANCE_AREA)
+            {
+                std::cout << "Encountered node " << idDistancePair.first << " in path" << std::endl;
+                isPositionOpen = false;
+                break;
+            }
         }
+        if (!isPositionOpen)
+        {
+            std::cout << "Moving to random alternate posistion" << std::endl;
+            position = getAlternatePosition(messageType);
+        }
+
         onNodeUpdated_(node_id_, position);
     }
 
@@ -86,7 +149,7 @@ namespace ketu::objects
         // Assign local neighbors if not assigned.
         if (neighbors.empty())
         {
-            std::cout<< "Annealing node " << getId() << " without neighbors" << std::endl;
+            std::cout << "Annealing node " << getId() << " without neighbors" << std::endl;
             auto nearestNodes =
                 sensing_client_->getKNearestNeighbors(getId(), formationCoordinator_->maxConnectivity());
             // Remove nodes already part of some other node's formation.
@@ -116,14 +179,13 @@ namespace ketu::objects
         }
         else if (neighbors.size() == formationCoordinator_->maxConnectivity())
         {
-            std::cout<< "Annealing node " << getId() << " with all neighbors" << std::endl;
-            auto nearestNodes =
-                sensing_client_->getDistanceToNodes(getId(), neighbors);
+            std::cout << "Annealing node " << getId() << " with all neighbors" << std::endl;
+            auto nearestNodes = sensing_client_->getDistanceToNodes(getId(), neighbors);
             std::unordered_map<std::string, ketu::telemetry::Position> frozenNeighbors;
             for (auto it = nearestNodes.begin(); it != nearestNodes.end();)
             {
 
-                if (formationCoordinator_->isNodeFrozen(it->first) )
+                if (formationCoordinator_->isNodeFrozen(it->first))
                 {
                     frozenNeighbors.insert({it->first, it->second});
                     it = nearestNodes.erase(it);
@@ -141,7 +203,7 @@ namespace ketu::objects
                 {
                     if (!formationCoordinator_->isNodeLocallyFormed(neighbor.first))
                     {
-                        std::cout<< "Propagating annealing to node " << neighbor.first << std::endl;
+                        std::cout << "Propagating annealing to node " << neighbor.first << std::endl;
                         communication_client_->sendMessage(neighbor.first, ketu::communication::MessageType::ANNEAL);
                         return;
                     }
@@ -156,14 +218,13 @@ namespace ketu::objects
         }
         else
         {
-            std::cout<< "Annealing node " << getId() << " with some neighbors" << std::endl;
+            std::cout << "Annealing node " << getId() << " with some neighbors" << std::endl;
             // Node has neighbors but some spots are still open.
             // We need to account for the fact that the nodes nearest neighbors are likely already in formation.
             int nearestNodesToConsider = formationCoordinator_->maxConnectivity() + EXTRA_NODES_FETCHED;
             // Use heuristic to fetch n nearby nodes, we cannot fetch all nodes since that
             // would be unrealistic in a real sensor.
-            auto nearestNodes =
-               sensing_client_->getKNearestNeighbors(getId(), nearestNodesToConsider);
+            auto nearestNodes = sensing_client_->getKNearestNeighbors(getId(), nearestNodesToConsider);
             std::unordered_map<std::string, ketu::telemetry::Position> availableNeighbors;
             int availableSlots = formationCoordinator_->maxConnectivity() - neighbors.size();
             for (auto it = nearestNodes.begin(); it != nearestNodes.end();)
@@ -175,7 +236,8 @@ namespace ketu::objects
                 if (formationCoordinator_->isNodeFrozen(it->first))
                 {
                     ++it;
-                } else
+                }
+                else
                 {
                     if (std::find(neighbors.begin(), neighbors.end(), it->first) == neighbors.end())
                     {

@@ -2,6 +2,8 @@ add_library(
         Scenarios
         random_nodes.h
         random_nodes.cpp
+        collision_avoidance.h
+        collision_avoidance.cpp
         scenario.h
         scenario.cpp
 )
