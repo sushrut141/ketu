@@ -37,7 +37,7 @@ namespace ketu::scenarios
         nodes_.push_back(std::move(leader));
 
 
-        for (int i = 0; i < 16; i += 1)
+        for (int i = 0; i < 6; i += 1)
         {
             std::string followerId = "follower_" + std::to_string(i + 1);
             double randX = 5.0 * static_cast<double>(rand()) / RAND_MAX;
@@ -59,12 +59,29 @@ namespace ketu::scenarios
         communication_client_->sendMessage(leaderId, ketu::communication::MessageType::ANNEAL);
     }
 
+    void RandomNodes::onEntitySelected(const std::string& entityId)
+    {
+        std::cout << "selected entity id " << entityId << std::endl;
+    }
+
     void RandomNodes::onNodeUpdated(std::string nodeId, ketu::telemetry::Position positionDiff)
     {
         const auto& position = world_->getNodePosition(nodeId);
         auto updatedPosition = position + positionDiff;
         world_->updateNode(nodeId, updatedPosition);
     }
+
+    void RandomNodes::onSelectedEntityMoved(const std::string& entityId, float xDistance, float yDistance)
+    {
+        const auto& position = world_->getNodePosition(entityId);
+        auto newPosition = ketu::telemetry::Position::from(
+            position.getX() - (0.01 * xDistance),
+            position.getY() - (0.01 * yDistance),
+            position.getZ()
+        );
+        world_->updateNode(entityId, newPosition);
+    }
+
 
 
 } // namespace ketu::scenarios

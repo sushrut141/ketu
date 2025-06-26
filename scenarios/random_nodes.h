@@ -12,12 +12,16 @@ namespace ketu::scenarios
     public:
         static std::unique_ptr<RandomNodes> create();
 
-        void setup();
+        void setup() override;
+
+        void onEntitySelected(const std::string& entityId) override;
+
+        void onSelectedEntityMoved(const std::string& entityId, float xDistance, float yDistance) override;
 
     private:
         RandomNodes(std::unique_ptr<ketu::world::World> world);
 
-        void onTick(unsigned long long frameNumber);
+        void onTick(unsigned long long frameNumber) override;
 
         void onNodeUpdated(std::string nodeId, ketu::telemetry::Position positionDiff);
 

@@ -8,7 +8,7 @@ namespace ketu::objects
 {
     constexpr double MOVEMENT_STEP = 0.005;
     constexpr int EXTRA_NODES_FETCHED = 12;
-    constexpr double NODE_CLEARANCE_AREA = 2.0;
+    constexpr double NODE_CLEARANCE_AREA = 0.5;
 
 
     namespace
@@ -56,16 +56,16 @@ namespace ketu::objects
                 position = ketu::telemetry::Position::from(0.0, -MOVEMENT_STEP, 0.0);
                 break;
             case ketu::communication::MessageType::MOVE_Y_POSITIVE:
-                position = ketu::telemetry::Position::from(MOVEMENT_STEP, 0.0, 0.0);
-                break;
-            case ketu::communication::MessageType::MOVE_Y_NEGATIVE:
                 position = ketu::telemetry::Position::from(-MOVEMENT_STEP, 0.0, 0.0);
                 break;
-            case ketu::communication::MessageType::MOVE_Z_POSITIVE:
+            case ketu::communication::MessageType::MOVE_Y_NEGATIVE:
                 position = ketu::telemetry::Position::from(MOVEMENT_STEP, 0.0, 0.0);
                 break;
+            case ketu::communication::MessageType::MOVE_Z_POSITIVE:
+                position = ketu::telemetry::Position::from(0.0, MOVEMENT_STEP, 0.0);
+                break;
             case ketu::communication::MessageType::MOVE_Z_NEGATIVE:
-                position = ketu::telemetry::Position::from(-MOVEMENT_STEP, 0.0, -0.0);
+                position = ketu::telemetry::Position::from(0.0, -MOVEMENT_STEP, -0.0);
                 break;
             case ketu::communication::MessageType::UNSPECIFIED:
             case ketu::communication::MessageType::STOP:

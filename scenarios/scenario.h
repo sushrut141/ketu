@@ -3,6 +3,7 @@
 
 #include "../world/world.h"
 
+#include <string>
 #include <memory>
 #include <unordered_map>
 
@@ -15,6 +16,11 @@ namespace ketu::scenarios
         // Carry out any initializations like node creation, sensor client creation etc
         // required to run this scenario.
         virtual void setup() = 0;
+
+        virtual void onEntitySelected(const std::string& entityId) = 0;
+
+        // Callback invoked with the distance mouse was moved while dragging a node.
+        virtual void onSelectedEntityMoved(const std::string& entityId, float xDistance, float yDistance) = 0;
 
         // Run the scenario.
         void run();

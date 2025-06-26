@@ -35,20 +35,20 @@ namespace ketu::scenarios
         world_->addNode(leader->getId(), ketu::telemetry::Position::from(0.0, 0.0, 0.0));
         nodes_.push_back(std::move(leader));
 
-        auto xMover = std::make_unique<ketu::objects::Node>(
-              "x_movable", sensing_client_.get(), communication_client_.get(), formationCoordinator_.get());
+        auto xMover = std::make_unique<ketu::objects::Node>("x_movable", sensing_client_.get(),
+                                                            communication_client_.get(), formationCoordinator_.get());
         xMover->setOnNodeUpdated(nodeUpdateCallback);
         world_->addNode(xMover->getId(), ketu::telemetry::Position::from(10.0, 0.0, 0.0));
         nodes_.push_back(std::move(xMover));
 
-        auto yMover = std::make_unique<ketu::objects::Node>(
-               "y_movable", sensing_client_.get(), communication_client_.get(), formationCoordinator_.get());
+        auto yMover = std::make_unique<ketu::objects::Node>("y_movable", sensing_client_.get(),
+                                                            communication_client_.get(), formationCoordinator_.get());
         yMover->setOnNodeUpdated(nodeUpdateCallback);
         world_->addNode(yMover->getId(), ketu::telemetry::Position::from(0.0, 10.0, 0.0));
         nodes_.push_back(std::move(yMover));
 
-        auto zMover = std::make_unique<ketu::objects::Node>(
-               "z_movable", sensing_client_.get(), communication_client_.get(), formationCoordinator_.get());
+        auto zMover = std::make_unique<ketu::objects::Node>("z_movable", sensing_client_.get(),
+                                                            communication_client_.get(), formationCoordinator_.get());
         zMover->setOnNodeUpdated(nodeUpdateCallback);
         world_->addNode(zMover->getId(), ketu::telemetry::Position::from(0.0, 0.0, 10.0));
         nodes_.push_back(std::move(zMover));
@@ -62,7 +62,7 @@ namespace ketu::scenarios
 
         communication_client_->sendMessage(xMovableId, ketu::communication::MessageType::MOVE_X_NEGATIVE);
         communication_client_->sendMessage(yMovableId, ketu::communication::MessageType::MOVE_Y_NEGATIVE);
-        communication_client_->sendMessage(zMovableId, ketu::communication::MessageType::MOVE_Z_NEGATIVE);
+        // communication_client_->sendMessage(zMovableId, ketu::communication::MessageType::MOVE_Z_NEGATIVE);
     }
 
     void CollisionAvoidance::onNodeUpdated(std::string nodeId, ketu::telemetry::Position positionDiff)
@@ -71,5 +71,9 @@ namespace ketu::scenarios
         auto updatedPosition = position + positionDiff;
         world_->updateNode(nodeId, updatedPosition);
     }
+
+    void CollisionAvoidance::onEntitySelected(const std::string& entityId) {}
+
+    void CollisionAvoidance::onSelectedEntityMoved(const std::string& entityId, float xDistance, float yDistance) {}
 
 } // namespace ketu::scenarios
