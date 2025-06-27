@@ -12,6 +12,9 @@
 
 namespace ketu::scenarios
 {
+
+    constexpr int NUM_FOLLOWERS = 12;
+
     std::unique_ptr<RandomNodes> RandomNodes::create()
     {
         srand(static_cast<unsigned int>(0));
@@ -37,7 +40,7 @@ namespace ketu::scenarios
         nodes_.push_back(std::move(leader));
 
 
-        for (int i = 0; i < 6; i += 1)
+        for (int i = 0; i < NUM_FOLLOWERS; i += 1)
         {
             std::string followerId = "follower_" + std::to_string(i + 1);
             double randX = 5.0 * static_cast<double>(rand()) / RAND_MAX;

@@ -38,7 +38,14 @@ namespace ketu::formation
         // Specifies whether node is already in formation.
         // This does not imply its neighbors are also in formation.
         // Use isNodeLocallyFormed() for that.
+        // DEPRECATED.
         virtual bool isNodeFrozen(const std::string& nodeId) = 0;
+
+        // Checks whether supplied node is already part of another node's formation.
+        virtual bool isNodeAssigned(const std::string& nodeId) = 0;
+
+        // Checks if the supplied target is in formation w.r.t to the source node.
+        virtual bool isNodeInPosition(const std::string& sourceNodeId, const std::string& targetNodeId) = 0;
 
         // Specifies whether all nodes are in formation.
         virtual bool isFormationComplete() = 0;

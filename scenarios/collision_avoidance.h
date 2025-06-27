@@ -21,7 +21,7 @@ namespace ketu::scenarios
     private:
         CollisionAvoidance(std::unique_ptr<ketu::world::World> world);
 
-        void onTick(unsigned long long frameNumber);
+        void onTick(unsigned long long frameNumber) override;
 
         void onNodeUpdated(std::string nodeId, ketu::telemetry::Position positionDiff);
 

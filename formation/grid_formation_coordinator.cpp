@@ -33,29 +33,24 @@ namespace ketu::formation
 
     bool GridFormationCoordinator::isNodeLocallyFormed(const std::string& nodeId)
     {
-        auto it = frozenNodes_.find(nodeId);
-        if (it != frozenNodes_.end())
+        bool nodeHasNeighbors = connectivity_.find(nodeId) != connectivity_.end();
+        if (!nodeHasNeighbors)
         {
-            bool nodeHasNeighbors = connectivity_.find(nodeId) != connectivity_.end();
-            if (!nodeHasNeighbors)
-            {
-                return false;
-            }
-            const auto& neighbors = connectivity_.at(nodeId);
-            if (neighbors.size() < maxConnectivity())
-            {
-                return false;
-            }
-            for (const auto& neighbors : neighbors)
-            {
-                if (frozenNodes_.find(neighbors.first) == frozenNodes_.end())
-                {
-                    return false;
-                }
-            }
-            return true;
+            return false;
         }
-        return false;
+        const auto& neighbors = connectivity_.at(nodeId);
+        if (neighbors.size() < maxConnectivity())
+        {
+            return false;
+        }
+        for (const auto& neighbors : neighbors)
+        {
+            if (!isNodeInPosition(nodeId, neighbors.first))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     std::vector<std::string> GridFormationCoordinator::getLocalNeighbors(const std::string& nodeId)
@@ -83,7 +78,7 @@ namespace ketu::formation
         {
             availablePositions.insert(i);
         }
-        for (const auto& neighbor: existingNeighbors)
+        for (const auto& neighbor : existingNeighbors)
         {
             availablePositions.erase(neighbor.second);
         }
@@ -103,7 +98,7 @@ namespace ketu::formation
             existingNeighbors.insert({neighborNodeId, positionIdx});
             neighborPtr += 1;
         }
-        for (const auto& neighbor: existingNeighbors)
+        for (const auto& neighbor : existingNeighbors)
         {
             int positionIdx = neighbor.second;
             connectivity_.insert({neighbor.first, {}});
@@ -117,6 +112,12 @@ namespace ketu::formation
     {
         return frozenNodes_.find(nodeId) != frozenNodes_.end();
     }
+
+    bool GridFormationCoordinator::isNodeAssigned(const std::string& nodeId)
+    {
+        return connectivity_.find(nodeId) != connectivity_.end();
+    }
+
 
     bool GridFormationCoordinator::isFormationComplete() {}
 
@@ -141,5 +142,26 @@ namespace ketu::formation
         }
         return messages;
     }
+
+    bool GridFormationCoordinator::isNodeInPosition(const std::string& sourceNodeId, const std::string& targetNodeId)
+    {
+        if (connectivity_.find(sourceNodeId) == connectivity_.end())
+        {
+            return false;
+        }
+        const auto& targetPositionMap = connectivity_.at(sourceNodeId);
+        if (targetPositionMap.find(targetNodeId) == targetPositionMap.end())
+        {
+            return false;
+        }
+        int targetPositionIdx = targetPositionMap.at(targetNodeId);
+        const auto& sourcePosition = world_->getNodePosition(sourceNodeId);
+        const auto& currentTargetPosition = world_->getNodePosition(targetNodeId);
+        const auto& expectedTargetPosition = *POSITIONS[targetPositionIdx];
+        ketu::communication::MessageType message =
+            ketu::planning::move(currentTargetPosition - sourcePosition, expectedTargetPosition - sourcePosition);
+        return message == ketu::communication::MessageType::STOP;
+    }
+
 
 } // namespace ketu::formation

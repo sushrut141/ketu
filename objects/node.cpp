@@ -120,7 +120,6 @@ namespace ketu::objects
     void Node::onNodeMove_(const ketu::communication::MessageType& messageType)
     {
         auto position = getPositionDiff(messageType);
-
         auto nearestNeighbors = sensing_client_->getKNearestNeighbors(getId(), EXTRA_NODES_FETCHED);
         bool isPositionOpen = true;
         for (const auto& idDistancePair: nearestNeighbors)
@@ -146,6 +145,7 @@ namespace ketu::objects
     void Node::onNodeAnneal_()
     {
         auto neighbors = formationCoordinator_->getLocalNeighbors(getId());
+        bool nodeInFormation = formationCoordinator_->isNodeLocallyFormed(getId());
         // Assign local neighbors if not assigned.
         if (neighbors.empty())
         {
@@ -155,7 +155,7 @@ namespace ketu::objects
             // Remove nodes already part of some other node's formation.
             for (auto it = nearestNodes.begin(); it != nearestNodes.end();)
             {
-                if (formationCoordinator_->isNodeFrozen(it->first))
+                if (formationCoordinator_->isNodeAssigned(it->first))
                 {
                     it = nearestNodes.erase(it);
                 }
@@ -177,6 +177,19 @@ namespace ketu::objects
                 communication_client_->sendMessage(neighbor.first, neighbor.second);
             }
         }
+        else if (nodeInFormation)
+        {
+            std::cout << "All neighbors formed for node " << getId() << std::endl;
+            for (const auto& neighbor : neighbors)
+            {
+                if (!formationCoordinator_->isNodeLocallyFormed(neighbor))
+                {
+                    std::cout << "Propagating annealing to node " << neighbor << std::endl;
+                    communication_client_->sendMessage(neighbor, ketu::communication::MessageType::ANNEAL);
+                    return;
+                }
+            }
+        }
         else if (neighbors.size() == formationCoordinator_->maxConnectivity())
         {
             std::cout << "Annealing node " << getId() << " with all neighbors" << std::endl;
@@ -185,7 +198,7 @@ namespace ketu::objects
             for (auto it = nearestNodes.begin(); it != nearestNodes.end();)
             {
 
-                if (formationCoordinator_->isNodeFrozen(it->first))
+                if (formationCoordinator_->isNodeInPosition(getId(), it->first))
                 {
                     frozenNeighbors.insert({it->first, it->second});
                     it = nearestNodes.erase(it);
@@ -195,21 +208,6 @@ namespace ketu::objects
                     ++it;
                 }
             }
-            // If all neighbors formed, pass the ANNEAL message to another neighbor.
-            if (frozenNeighbors.size() == formationCoordinator_->maxConnectivity())
-            {
-                std::cout << "All neighbors formed for node " << getId() << std::endl;
-                for (const auto& neighbor : frozenNeighbors)
-                {
-                    if (!formationCoordinator_->isNodeLocallyFormed(neighbor.first))
-                    {
-                        std::cout << "Propagating annealing to node " << neighbor.first << std::endl;
-                        communication_client_->sendMessage(neighbor.first, ketu::communication::MessageType::ANNEAL);
-                        return;
-                    }
-                }
-            }
-
             auto neighborMessages = formationCoordinator_->align(getId(), nearestNodes);
             for (const auto& neighborMessage : neighborMessages)
             {
@@ -233,7 +231,7 @@ namespace ketu::objects
                 {
                     break;
                 }
-                if (formationCoordinator_->isNodeFrozen(it->first))
+                if (formationCoordinator_->isNodeInPosition(getId(), it->first))
                 {
                     ++it;
                 }

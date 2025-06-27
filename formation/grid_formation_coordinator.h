@@ -26,6 +26,10 @@ namespace ketu::formation
 
         bool isNodeFrozen(const std::string& nodeId) override;
 
+        bool isNodeAssigned(const std::string& nodeId) override;
+
+        bool isNodeInPosition(const std::string& sourceNodeId, const std::string& targetNodeId) override;
+
         bool isFormationComplete() override;
 
         const NodeMessages align(const std::string& nodeId, const NodePositions& relativeNodePositions) override;
