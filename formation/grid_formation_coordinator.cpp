@@ -1,6 +1,7 @@
 
 #include "grid_formation_coordinator.h"
 
+#include <iostream>
 #include <unordered_set>
 
 #include "../planning/movement.h"
@@ -137,6 +138,7 @@ namespace ketu::formation
             messages.insert({neighborId, message});
             if (message == ketu::communication::MessageType::STOP)
             {
+                std::cout << "Node " << neighborId << " is in target position" << std::endl;
                 frozenNodes_.insert(neighborId);
             }
         }
@@ -159,7 +161,7 @@ namespace ketu::formation
         const auto& currentTargetPosition = world_->getNodePosition(targetNodeId);
         const auto& expectedTargetPosition = *POSITIONS[targetPositionIdx];
         ketu::communication::MessageType message =
-            ketu::planning::move(currentTargetPosition - sourcePosition, expectedTargetPosition - sourcePosition);
+            ketu::planning::move(currentTargetPosition - sourcePosition, expectedTargetPosition);
         return message == ketu::communication::MessageType::STOP;
     }
 

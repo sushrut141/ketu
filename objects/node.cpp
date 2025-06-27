@@ -7,7 +7,7 @@
 namespace ketu::objects
 {
     constexpr double MOVEMENT_STEP = 0.005;
-    constexpr int EXTRA_NODES_FETCHED = 12;
+    constexpr int EXTRA_NODES_FETCHED = 100;
     constexpr double NODE_CLEARANCE_AREA = 0.5;
 
 
@@ -145,7 +145,7 @@ namespace ketu::objects
     void Node::onNodeAnneal_()
     {
         auto neighbors = formationCoordinator_->getLocalNeighbors(getId());
-        bool nodeInFormation = formationCoordinator_->isNodeLocallyFormed(getId());
+        bool nodesInFormation = formationCoordinator_->isNodeLocallyFormed(getId());
         // Assign local neighbors if not assigned.
         if (neighbors.empty())
         {
@@ -177,7 +177,7 @@ namespace ketu::objects
                 communication_client_->sendMessage(neighbor.first, neighbor.second);
             }
         }
-        else if (nodeInFormation)
+        else if (nodesInFormation)
         {
             std::cout << "All neighbors formed for node " << getId() << std::endl;
             for (const auto& neighbor : neighbors)
@@ -200,6 +200,7 @@ namespace ketu::objects
 
                 if (formationCoordinator_->isNodeInPosition(getId(), it->first))
                 {
+                    std::cout << "Node " << it->first << " already in position" << std::endl;
                     frozenNeighbors.insert({it->first, it->second});
                     it = nearestNodes.erase(it);
                 }
@@ -219,33 +220,33 @@ namespace ketu::objects
             std::cout << "Annealing node " << getId() << " with some neighbors" << std::endl;
             // Node has neighbors but some spots are still open.
             // We need to account for the fact that the nodes nearest neighbors are likely already in formation.
-            int nearestNodesToConsider = formationCoordinator_->maxConnectivity() + EXTRA_NODES_FETCHED;
+            int nearestNodesToConsider = EXTRA_NODES_FETCHED;
             // Use heuristic to fetch n nearby nodes, we cannot fetch all nodes since that
             // would be unrealistic in a real sensor.
             auto nearestNodes = sensing_client_->getKNearestNeighbors(getId(), nearestNodesToConsider);
             std::unordered_map<std::string, ketu::telemetry::Position> availableNeighbors;
             int availableSlots = formationCoordinator_->maxConnectivity() - neighbors.size();
+            std::cout << "Available slots: " <<  availableSlots << " and neighbors: " << neighbors.size() << std::endl;
+            std::cout << "Assigning available slots from nearest nodes: " << nearestNodes.size() << std::endl;
             for (auto it = nearestNodes.begin(); it != nearestNodes.end();)
             {
                 if (availableSlots == 0)
                 {
                     break;
                 }
-                if (formationCoordinator_->isNodeInPosition(getId(), it->first))
+                if (formationCoordinator_->isNodeAssigned(it->first))
                 {
                     ++it;
                 }
                 else
                 {
-                    if (std::find(neighbors.begin(), neighbors.end(), it->first) == neighbors.end())
-                    {
-                        neighbors.push_back(it->first);
-                    }
+                    neighbors.push_back(it->first);
                     availableNeighbors.insert({it->first, it->second});
                     availableSlots -= 1;
                     ++it;
                 }
             }
+            std::cout << "Post assignment available slots: " <<  availableSlots << " and neighbors " << neighbors.size() << std::endl;
             // Update neighbors to include new nodes.
             formationCoordinator_->setLocalNeighbors(getId(), neighbors);
             auto neighborMessages = formationCoordinator_->align(getId(), availableNeighbors);

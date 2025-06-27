@@ -13,7 +13,7 @@
 namespace ketu::scenarios
 {
 
-    constexpr int NUM_FOLLOWERS = 12;
+    constexpr int NUM_FOLLOWERS = 16;
 
     std::unique_ptr<RandomNodes> RandomNodes::create()
     {
