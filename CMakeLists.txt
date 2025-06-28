@@ -15,6 +15,7 @@ add_subdirectory(telemetry)
 add_subdirectory(scenarios)
 add_subdirectory(formation)
 add_subdirectory(planning)
+add_subdirectory(third_party)
 
 
 add_executable(main main.cpp)
