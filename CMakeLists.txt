@@ -22,6 +22,8 @@ add_executable(main main.cpp)
 
 target_link_libraries(main
         Scenarios
+        TinyObj
 )
 
 file(COPY "${CMAKE_SOURCE_DIR}/scenarios/raylib/shaders" DESTINATION "${CMAKE_BINARY_DIR}/")
+file(COPY "${CMAKE_SOURCE_DIR}/mesh.obj" DESTINATION "${CMAKE_BINARY_DIR}/")
