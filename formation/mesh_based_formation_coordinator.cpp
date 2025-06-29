@@ -26,7 +26,7 @@ namespace ketu::formation
     {
         if (nodeSlotMapping_.find(nodeId) != nodeSlotMapping_.end())
         {
-            const int slot = nodeSlotMapping_[nodeId];
+            const int slot = nodeSlotMapping_.at(nodeId);
             const auto& connectivity = loader_->getConnectivity().at(slot);
             return connectivity.size();
         }
@@ -40,7 +40,7 @@ namespace ketu::formation
         {
             return false;
         }
-        const int nodeIdx = nodeSlotMapping_[nodeId];
+        const int nodeIdx = nodeSlotMapping_.at(nodeId);
         const auto neighbors = getLocalNeighbors(nodeId);
         const auto& connectivity = loader_->getConnectivity().at(nodeIdx);
         if (neighbors.size() != connectivity.size())
@@ -64,7 +64,7 @@ namespace ketu::formation
         {
             return {};
         }
-        const int nodeIdx = nodeSlotMapping_[nodeId];
+        const int nodeIdx = nodeSlotMapping_.at(nodeId);
         const auto& connectivity = loader_->getConnectivity().at(nodeIdx);
 
         std::vector<std::string> neighbors;
@@ -91,7 +91,7 @@ namespace ketu::formation
             nodeSlotMapping_[nodeId] = nodeIdx;
             availableSlots_.erase(nodeIdx);
         }
-        const int nodeIdx = nodeSlotMapping_[nodeId];
+        const int nodeIdx = nodeSlotMapping_.at(nodeId);
         const auto& connectivity = loader_->getConnectivity().at(nodeIdx);
         int neighborPtr = 0;
         int connectivityPtr = 0;
@@ -99,7 +99,7 @@ namespace ketu::formation
         {
             const std::string& neighbor = neighbors[neighborPtr];
             const int connectivityIdx = connectivity[connectivityPtr];
-            if (nodeSlotMapping_.find(neighbor) != nodeSlotMapping_.end())
+            if (isNodeAssigned(neighbor))
             {
                 neighborPtr += 1;
                 continue;
@@ -133,8 +133,8 @@ namespace ketu::formation
         {
             return false;
         }
-        const int sourceIdx = nodeSlotMapping_[sourceNodeId];
-        const int targetIdx = nodeSlotMapping_[targetNodeId];
+        const int sourceIdx = nodeSlotMapping_.at(sourceNodeId);
+        const int targetIdx = nodeSlotMapping_.at(targetNodeId);
         const auto expectedTargetPosition = loader_->getVertices().at(targetIdx) - loader_->getVertices().at(sourceIdx);
         const auto targetCurrentPosition = world_->getNodePosition(targetNodeId) - world_->getNodePosition(sourceNodeId);
         return ketu::planning::move(targetCurrentPosition, expectedTargetPosition) == ketu::communication::MessageType::STOP;
@@ -145,7 +145,6 @@ namespace ketu::formation
     const NodeMessages MeshBasedFormationCoordinator::align(const std::string& nodeId,
                                                             const NodePositions& relativeNodePositions)
     {
-
         if (!isNodeAssigned(nodeId))
         {
             throw std::runtime_error("MeshBasedFormationCoordinator::align: node not assigned");
@@ -155,7 +154,7 @@ namespace ketu::formation
         const auto& connectivity = loader_->getConnectivity().at(nodeIdx);
         for (const auto& [neighborId, neighborRelativePosition] : relativeNodePositions)
         {
-            const int neighborIdx = nodeSlotMapping_[neighborId];
+            const int neighborIdx = nodeSlotMapping_.at(neighborId);
             const auto& expectedNeighborPosition = loader_->getVertices().at(neighborIdx) - loader_->getVertices().at(nodeIdx);
             const ketu::communication::MessageType message = ketu::planning::move(neighborRelativePosition, expectedNeighborPosition);
             messages.insert({neighborId, message});

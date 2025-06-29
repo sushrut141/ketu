@@ -122,7 +122,7 @@ namespace ketu::objects
         auto position = getPositionDiff(messageType);
         auto nearestNeighbors = sensing_client_->getKNearestNeighbors(getId(), EXTRA_NODES_FETCHED);
         bool isPositionOpen = true;
-        for (const auto& idDistancePair: nearestNeighbors)
+        for (const auto& idDistancePair : nearestNeighbors)
         {
             auto diff = idDistancePair.second - position;
             double magnitude = diff.magnitude();
@@ -150,8 +150,7 @@ namespace ketu::objects
         if (neighbors.empty())
         {
             std::cout << "Annealing node " << getId() << " without neighbors" << std::endl;
-            auto nearestNodes =
-                sensing_client_->getKNearestNeighbors(getId(), EXTRA_NODES_FETCHED);
+            auto nearestNodes = sensing_client_->getKNearestNeighbors(getId(), EXTRA_NODES_FETCHED);
             // Remove nodes already part of some other node's formation.
             for (auto it = nearestNodes.begin(); it != nearestNodes.end();)
             {
@@ -170,6 +169,22 @@ namespace ketu::objects
                 neighborIds.push_back(it->first);
             }
             formationCoordinator_->setLocalNeighbors(getId(), neighborIds);
+            // Not all nearest nodes will get assigned slots so fetch it again
+            // and only align nodes that are actually assigned.
+            const auto& assignedNeighbors = formationCoordinator_->getLocalNeighbors(getId());
+            for (auto it = nearestNodes.begin(); it != nearestNodes.end();)
+            {
+                const std::string& neighborId = it->first;
+                if (std::find(assignedNeighbors.begin(), assignedNeighbors.end(), neighborId) ==
+                    assignedNeighbors.end())
+                {
+                    it = nearestNodes.erase(it);
+                }
+                else
+                {
+                    ++it;
+                }
+            }
 
             auto neighborMessages = formationCoordinator_->align(getId(), nearestNodes);
             for (const auto& neighbor : neighborMessages)
@@ -193,11 +208,14 @@ namespace ketu::objects
         else if (neighbors.size() == formationCoordinator_->getMaxNeighborCount(getId()))
         {
             std::cout << "Annealing node " << getId() << " with all neighbors" << std::endl;
+            for (const auto& neighbor : neighbors)
+            {
+                std::cout << " Neighbor " << neighbor << std::endl;
+            }
             auto nearestNodes = sensing_client_->getDistanceToNodes(getId(), neighbors);
             std::unordered_map<std::string, ketu::telemetry::Position> frozenNeighbors;
             for (auto it = nearestNodes.begin(); it != nearestNodes.end();)
             {
-
                 if (formationCoordinator_->isNodeInPosition(getId(), it->first))
                 {
                     std::cout << "Node " << it->first << " already in position" << std::endl;
@@ -223,7 +241,7 @@ namespace ketu::objects
             auto nearestNodes = sensing_client_->getKNearestNeighbors(getId(), EXTRA_NODES_FETCHED);
             std::unordered_map<std::string, ketu::telemetry::Position> availableNeighbors;
             int availableSlots = formationCoordinator_->getMaxNeighborCount(getId()) - neighbors.size();
-            std::cout << "Available slots: " <<  availableSlots << " and neighbors: " << neighbors.size() << std::endl;
+            std::cout << "Available slots: " << availableSlots << " and neighbors: " << neighbors.size() << std::endl;
             std::cout << "Assigning available slots from nearest nodes: " << nearestNodes.size() << std::endl;
             for (auto it = nearestNodes.begin(); it != nearestNodes.end();)
             {
@@ -243,7 +261,8 @@ namespace ketu::objects
                     ++it;
                 }
             }
-            std::cout << "Post assignment available slots: " <<  availableSlots << " and neighbors " << neighbors.size() << std::endl;
+            std::cout << "Post assignment available slots: " << availableSlots << " and neighbors " << neighbors.size()
+                      << std::endl;
             // Update neighbors to include new nodes.
             formationCoordinator_->setLocalNeighbors(getId(), neighbors);
             auto neighborMessages = formationCoordinator_->align(getId(), availableNeighbors);

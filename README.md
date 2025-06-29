@@ -37,6 +37,7 @@ Checkout the RandomNodes scenarios in the scenarios directory to get started.
 
 Ketu has very few dependencies namely
  - [Raylib](https://www.raylib.com)
+ - [TinyOBJ](https://github.com/tinyobjloader/tinyobjloader/tree/release) - header already included, no installation required 
 
 That's it, once you have raylib installed on your machine you're good to go.
 

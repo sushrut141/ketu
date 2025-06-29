@@ -13,6 +13,7 @@
 namespace ketu::scenarios
 {
 
+    constexpr char MESH_NAME[] = "mesh.obj";
     constexpr int NUM_FOLLOWERS = 8;
 
     std::unique_ptr<RandomNodes> RandomNodes::create()
@@ -27,7 +28,7 @@ namespace ketu::scenarios
         this->sensing_client_ = std::make_unique<ketu::sensing::SensingClient>(this->world_.get());
         this->communication_client_ = std::make_unique<ketu::communication::CommunicationClient>(this->world_.get());
         this->formationCoordinator_ =
-            std::make_unique<ketu::formation::MeshBasedFormationCoordinator>("mesh.obj", world_.get());
+            std::make_unique<ketu::formation::MeshBasedFormationCoordinator>(MESH_NAME, world_.get());
     }
 
     void RandomNodes::setup()
