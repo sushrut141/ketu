@@ -6,14 +6,14 @@
 #include <valarray>
 
 #include "../communication/interfaces.h"
-#include "../formation/grid_formation_coordinator.h"
+#include "../formation/mesh_based_formation_coordinator.h"
 
 #include "../objects/node.h"
 
 namespace ketu::scenarios
 {
 
-    constexpr int NUM_FOLLOWERS = 16;
+    constexpr int NUM_FOLLOWERS = 8;
 
     std::unique_ptr<RandomNodes> RandomNodes::create()
     {
@@ -26,7 +26,8 @@ namespace ketu::scenarios
     {
         this->sensing_client_ = std::make_unique<ketu::sensing::SensingClient>(this->world_.get());
         this->communication_client_ = std::make_unique<ketu::communication::CommunicationClient>(this->world_.get());
-        this->formationCoordinator_ = std::make_unique<ketu::formation::GridFormationCoordinator>(world_.get());
+        this->formationCoordinator_ =
+            std::make_unique<ketu::formation::MeshBasedFormationCoordinator>("mesh.obj", world_.get());
     }
 
     void RandomNodes::setup()
@@ -77,14 +78,10 @@ namespace ketu::scenarios
     void RandomNodes::onSelectedEntityMoved(const std::string& entityId, float xDistance, float yDistance)
     {
         const auto& position = world_->getNodePosition(entityId);
-        auto newPosition = ketu::telemetry::Position::from(
-            position.getX() - (0.01 * xDistance),
-            position.getY() - (0.01 * yDistance),
-            position.getZ()
-        );
+        auto newPosition = ketu::telemetry::Position::from(position.getX() - (0.01 * xDistance),
+                                                           position.getY() - (0.01 * yDistance), position.getZ());
         world_->updateNode(entityId, newPosition);
     }
-
 
 
 } // namespace ketu::scenarios

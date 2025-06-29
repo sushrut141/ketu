@@ -32,7 +32,7 @@ namespace ketu::formation
 
     int GridFormationCoordinator::maxConnectivity() { return 6; }
 
-    int GridFormationCoordinator::getMaxNeighBorCount(const std::string& nodeId)
+    int GridFormationCoordinator::getMaxNeighborCount(const std::string& nodeId)
     {
         return 0;
     }

@@ -22,7 +22,7 @@ namespace ketu::formation
 
     int MeshBasedFormationCoordinator::maxConnectivity() { return 0; }
 
-    int MeshBasedFormationCoordinator::getMaxNeighBorCount(const std::string& nodeId)
+    int MeshBasedFormationCoordinator::getMaxNeighborCount(const std::string& nodeId)
     {
         if (nodeSlotMapping_.find(nodeId) != nodeSlotMapping_.end())
         {

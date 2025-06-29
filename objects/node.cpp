@@ -151,7 +151,7 @@ namespace ketu::objects
         {
             std::cout << "Annealing node " << getId() << " without neighbors" << std::endl;
             auto nearestNodes =
-                sensing_client_->getKNearestNeighbors(getId(), formationCoordinator_->maxConnectivity());
+                sensing_client_->getKNearestNeighbors(getId(), EXTRA_NODES_FETCHED);
             // Remove nodes already part of some other node's formation.
             for (auto it = nearestNodes.begin(); it != nearestNodes.end();)
             {
@@ -190,7 +190,7 @@ namespace ketu::objects
                 }
             }
         }
-        else if (neighbors.size() == formationCoordinator_->maxConnectivity())
+        else if (neighbors.size() == formationCoordinator_->getMaxNeighborCount(getId()))
         {
             std::cout << "Annealing node " << getId() << " with all neighbors" << std::endl;
             auto nearestNodes = sensing_client_->getDistanceToNodes(getId(), neighbors);
@@ -218,14 +218,11 @@ namespace ketu::objects
         else
         {
             std::cout << "Annealing node " << getId() << " with some neighbors" << std::endl;
-            // Node has neighbors but some spots are still open.
-            // We need to account for the fact that the nodes nearest neighbors are likely already in formation.
-            int nearestNodesToConsider = EXTRA_NODES_FETCHED;
             // Use heuristic to fetch n nearby nodes, we cannot fetch all nodes since that
             // would be unrealistic in a real sensor.
-            auto nearestNodes = sensing_client_->getKNearestNeighbors(getId(), nearestNodesToConsider);
+            auto nearestNodes = sensing_client_->getKNearestNeighbors(getId(), EXTRA_NODES_FETCHED);
             std::unordered_map<std::string, ketu::telemetry::Position> availableNeighbors;
-            int availableSlots = formationCoordinator_->maxConnectivity() - neighbors.size();
+            int availableSlots = formationCoordinator_->getMaxNeighborCount(getId()) - neighbors.size();
             std::cout << "Available slots: " <<  availableSlots << " and neighbors: " << neighbors.size() << std::endl;
             std::cout << "Assigning available slots from nearest nodes: " << nearestNodes.size() << std::endl;
             for (auto it = nearestNodes.begin(); it != nearestNodes.end();)

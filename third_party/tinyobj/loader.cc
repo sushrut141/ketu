@@ -12,6 +12,9 @@ namespace ketu::thirdparty::tinyobj
 
     namespace
     {
+
+        constexpr double SCALING_FACTOR = 1.0;
+
         struct MeshData
         {
             std::vector<ketu::telemetry::Position> vertices;
@@ -53,9 +56,9 @@ namespace ketu::thirdparty::tinyobj
             for (size_t v = 0; v < attrib.vertices.size() / 3; ++v)
             {
                 vertices->push_back({
-                    attrib.vertices[3 * v + 0], // X
-                    attrib.vertices[3 * v + 1], // Y
-                    attrib.vertices[3 * v + 2] // Z
+                    SCALING_FACTOR * attrib.vertices[3 * v + 0], // X
+                    SCALING_FACTOR * attrib.vertices[3 * v + 1], // Y
+                    SCALING_FACTOR * attrib.vertices[3 * v + 2] // Z
                 });
             }
 

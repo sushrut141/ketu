@@ -26,7 +26,7 @@ namespace ketu::formation
         virtual int maxConnectivity() = 0;
 
         // Get the maximum number of connected neighbors for the supplied node.
-        virtual int getMaxNeighBorCount(const std::string& nodeId) = 0;
+        virtual int getMaxNeighborCount(const std::string& nodeId) = 0;
 
         // Specifies whether the current node and all it's neighbors are in formation.
         virtual bool isNodeLocallyFormed(const std::string& nodeId) = 0;
