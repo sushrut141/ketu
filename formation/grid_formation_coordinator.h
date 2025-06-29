@@ -18,6 +18,8 @@ namespace ketu::formation
 
         int maxConnectivity() override;
 
+        int getMaxNeighBorCount(const std::string& nodeId) override;
+
         bool isNodeLocallyFormed(const std::string& nodeId) override;
 
         std::vector<std::string> getLocalNeighbors(const std::string& nodeId) override;

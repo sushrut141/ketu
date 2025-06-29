@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_map>
 
+#include "../telemetry/position.h"
 #include "../communication/interfaces.h"
 
 namespace ketu::formation
@@ -21,7 +22,11 @@ namespace ketu::formation
 
         // Specifies the maximum number of edges for each node in the formation.
         // Can be used to identify how many neighbors need to be brought into formation.
+        // DEPRECATED
         virtual int maxConnectivity() = 0;
+
+        // Get the maximum number of connected neighbors for the supplied node.
+        virtual int getMaxNeighBorCount(const std::string& nodeId) = 0;
 
         // Specifies whether the current node and all it's neighbors are in formation.
         virtual bool isNodeLocallyFormed(const std::string& nodeId) = 0;

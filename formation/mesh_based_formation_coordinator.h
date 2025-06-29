@@ -2,19 +2,26 @@
 #define MESH_BASED_FORMATION_COORDINATOR_H
 
 #include <memory>
+#include <unordered_map>
+#include <vector>
+#include <set>
 #include <string>
 
-#include "../third_party/tinyobj/loader.h"
 #include "formation_coordinator.h"
+#include "../third_party/tinyobj/loader.h"
+#include "../world/world.h"
 
 namespace ketu::formation
 {
     class MeshBasedFormationCoordinator : public FormationCoordinator
     {
     public:
-        MeshBasedFormationCoordinator(const std::string& meshPath);
+        MeshBasedFormationCoordinator(const std::string& meshPath,
+            const ketu::world::World* world);
 
         int maxConnectivity() override;
+
+        int getMaxNeighBorCount(const std::string& nodeId) override;
 
         bool isNodeLocallyFormed(const std::string& nodeId) override;
 
@@ -33,7 +40,10 @@ namespace ketu::formation
         const NodeMessages align(const std::string& nodeId, const NodePositions& relativeNodePositions) override;
 
     private:
+        const ketu::world::World* world_;
         std::unique_ptr<ketu::thirdparty::tinyobj::Loader> loader_;
+        std::unordered_map<std::string, int> nodeSlotMapping_;
+        std::set<int> availableSlots_;
     };
 
 } // ketu::formation

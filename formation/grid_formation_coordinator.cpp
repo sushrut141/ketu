@@ -32,6 +32,12 @@ namespace ketu::formation
 
     int GridFormationCoordinator::maxConnectivity() { return 6; }
 
+    int GridFormationCoordinator::getMaxNeighBorCount(const std::string& nodeId)
+    {
+        return 0;
+    }
+
+
     bool GridFormationCoordinator::isNodeLocallyFormed(const std::string& nodeId)
     {
         bool nodeHasNeighbors = connectivity_.find(nodeId) != connectivity_.end();
