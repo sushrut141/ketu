@@ -9,6 +9,8 @@ add_library(
         FormationCoordinator SHARED
         grid_formation_coordinator.cpp
         grid_formation_coordinator.h
+        mesh_based_formation_coordinator.cpp
+        mesh_based_formation_coordinator.h
         formation_coordinator.h
 )
 
@@ -26,6 +28,7 @@ target_include_directories(FormationCoordinator PUBLIC
         CommunicationInterface
         Telemetry
         Planning
+        TinyObj
 )
 
 target_link_libraries(
@@ -40,4 +43,5 @@ target_link_libraries(
         CommunicationInterface
         Telemetry
         Planning
+        TinyObj
 )
