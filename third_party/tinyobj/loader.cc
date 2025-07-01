@@ -97,8 +97,13 @@ namespace ketu::thirdparty::tinyobj
             {
                 (*adjacency_list)[pair.first].assign(pair.second.begin(), pair.second.end());
             }
-
-
+            for (int i = 0; i < vertices->size(); ++i)
+            {
+                if (adjacency_list->find(i) == adjacency_list->end())
+                {
+                    adjacency_list->insert({i, {}});
+                }
+            }
             std::cout << "OBJ: Loaded " << vertices->size() << " vertices and "
                       << adjacency_list->size() << " unique vertex adjacencies from " << filePath << std::endl;
             return true;

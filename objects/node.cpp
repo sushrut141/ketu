@@ -145,24 +145,11 @@ namespace ketu::objects
     void Node::onNodeAnneal_()
     {
         auto neighbors = formationCoordinator_->getLocalNeighbors(getId());
-        bool nodesInFormation = formationCoordinator_->isNodeLocallyFormed(getId());
         // Assign local neighbors if not assigned.
         if (neighbors.empty())
         {
             std::cout << "Annealing node " << getId() << " without neighbors" << std::endl;
             auto nearestNodes = sensing_client_->getKNearestNeighbors(getId(), EXTRA_NODES_FETCHED);
-            // Remove nodes already part of some other node's formation.
-            for (auto it = nearestNodes.begin(); it != nearestNodes.end();)
-            {
-                if (formationCoordinator_->isNodeAssigned(it->first))
-                {
-                    it = nearestNodes.erase(it);
-                }
-                else
-                {
-                    ++it;
-                }
-            }
             std::vector<std::string> neighborIds;
             for (auto it = nearestNodes.begin(); it != nearestNodes.end(); ++it)
             {
@@ -192,19 +179,6 @@ namespace ketu::objects
                 communication_client_->sendMessage(neighbor.first, neighbor.second);
             }
         }
-        else if (nodesInFormation)
-        {
-            std::cout << "All neighbors formed for node " << getId() << std::endl;
-            for (const auto& neighbor : neighbors)
-            {
-                if (!formationCoordinator_->isNodeLocallyFormed(neighbor))
-                {
-                    std::cout << "Propagating annealing to node " << neighbor << std::endl;
-                    communication_client_->sendMessage(neighbor, ketu::communication::MessageType::ANNEAL);
-                    return;
-                }
-            }
-        }
         else if (neighbors.size() == formationCoordinator_->getMaxNeighborCount(getId()))
         {
             std::cout << "Annealing node " << getId() << " with all neighbors" << std::endl;
@@ -213,24 +187,19 @@ namespace ketu::objects
                 std::cout << " Neighbor " << neighbor << std::endl;
             }
             auto nearestNodes = sensing_client_->getDistanceToNodes(getId(), neighbors);
-            std::unordered_map<std::string, ketu::telemetry::Position> frozenNeighbors;
-            for (auto it = nearestNodes.begin(); it != nearestNodes.end();)
-            {
-                if (formationCoordinator_->isNodeInPosition(getId(), it->first))
-                {
-                    std::cout << "Node " << it->first << " already in position" << std::endl;
-                    frozenNeighbors.insert({it->first, it->second});
-                    it = nearestNodes.erase(it);
-                }
-                else
-                {
-                    ++it;
-                }
-            }
             auto neighborMessages = formationCoordinator_->align(getId(), nearestNodes);
             for (const auto& neighborMessage : neighborMessages)
             {
                 communication_client_->sendMessage(neighborMessage.first, neighborMessage.second);
+            }
+            // Propagate annealing to all neighbors.
+            for (const auto& neighbor : neighbors)
+            {
+                if (!formationCoordinator_->isNodeLocallyFormed(neighbor))
+                {
+                    std::cout << "Propagating annealing to node " << neighbor << std::endl;
+                    communication_client_->sendMessage(neighbor, ketu::communication::MessageType::ANNEAL);
+                }
             }
         }
         else

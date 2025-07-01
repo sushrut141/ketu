@@ -9,11 +9,12 @@ namespace ketu::formation
 
     MeshBasedFormationCoordinator::MeshBasedFormationCoordinator(const std::string& meshPath,
                                                                  const ketu::world::World* world) :
-        FormationCoordinator(), world_(world)
+        FormationCoordinator(), world_(world), priorityCounter_(0)
     {
         loader_ = std::move(ketu::thirdparty::tinyobj::Loader::fromOBJFile(meshPath));
         nodeSlotMapping_ = {};
         availableSlots_ = {};
+        priorityMapping_ = {};
         for (int i = 0 ; i < loader_->getVertices().size() ; i += 1)
         {
             availableSlots_.insert(i);
@@ -26,7 +27,24 @@ namespace ketu::formation
         {
             const int slot = nodeSlotMapping_.at(nodeId);
             const auto& connectivity = loader_->getConnectivity().at(slot);
-            return connectivity.size();
+            const int nodePriority = priorityMapping_.at(nodeId);
+            int neighborCount = 0;
+            for (const auto& [neighborId, neighborSlot]: nodeSlotMapping_)
+            {
+                if (neighborId == nodeId)
+                {
+                    continue;
+                }
+                if (std::find(connectivity.begin(), connectivity.end(), neighborSlot) != connectivity.end())
+                {
+                    const int neighborPriority = priorityMapping_.at(neighborId);
+                    if (neighborPriority > nodePriority)
+                    {
+                        neighborCount += 1;
+                    }
+                }
+            }
+            return neighborCount;
         }
         return 0;
     }
@@ -62,6 +80,7 @@ namespace ketu::formation
         {
             return {};
         }
+        const int nodePriority = priorityMapping_.at(nodeId);
         const int nodeIdx = nodeSlotMapping_.at(nodeId);
         const auto& connectivity = loader_->getConnectivity().at(nodeIdx);
 
@@ -70,7 +89,11 @@ namespace ketu::formation
         {
             if (std::find(connectivity.begin(), connectivity.end(), nodeIdIdxPair.second) != connectivity.end())
             {
-                neighbors.push_back(nodeIdIdxPair.first);
+                const int neighborPriority = priorityMapping_.at(nodeIdIdxPair.first);
+                if (nodePriority < neighborPriority)
+                {
+                    neighbors.push_back(nodeIdIdxPair.first);
+                }
             }
             if (neighbors.size() == connectivity.size())
             {
@@ -89,6 +112,7 @@ namespace ketu::formation
             nodeSlotMapping_[nodeId] = nodeIdx;
             availableSlots_.erase(nodeIdx);
         }
+        assignPriority(nodeId);
         const int nodeIdx = nodeSlotMapping_.at(nodeId);
         const auto& connectivity = loader_->getConnectivity().at(nodeIdx);
         int neighborPtr = 0;
@@ -107,6 +131,7 @@ namespace ketu::formation
                 connectivityPtr += 1;
                 continue;
             }
+            assignPriority(neighbor);
             nodeSlotMapping_[neighbor] = connectivityIdx;
             availableSlots_.erase(connectivityIdx);
 
@@ -161,5 +186,15 @@ namespace ketu::formation
         }
         return messages;
     }
+
+    void MeshBasedFormationCoordinator::assignPriority(const std::string& nodeId)
+    {
+        if (priorityMapping_.find(nodeId) == priorityMapping_.end())
+        {
+            priorityMapping_.insert({nodeId, priorityCounter_});
+            priorityCounter_ += 1;
+        }
+    }
+
 
 } // namespace ketu::formation

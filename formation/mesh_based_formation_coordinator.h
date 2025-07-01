@@ -36,10 +36,17 @@ namespace ketu::formation
         const NodeMessages align(const std::string& nodeId, const NodePositions& relativeNodePositions) override;
 
     private:
+
+        void assignPriority(const std::string& nodeId);
+
         const ketu::world::World* world_;
         std::unique_ptr<ketu::thirdparty::tinyobj::Loader> loader_;
         std::unordered_map<std::string, int> nodeSlotMapping_;
         std::set<int> availableSlots_;
+
+        // priority
+        int priorityCounter_;
+        std::unordered_map<std::string, int> priorityMapping_;
     };
 
 } // ketu::formation
