@@ -20,8 +20,6 @@ namespace ketu::formation
         }
     }
 
-    int MeshBasedFormationCoordinator::maxConnectivity() { return 0; }
-
     int MeshBasedFormationCoordinator::getMaxNeighborCount(const std::string& nodeId)
     {
         if (nodeSlotMapping_.find(nodeId) != nodeSlotMapping_.end())
@@ -116,8 +114,6 @@ namespace ketu::formation
             connectivityPtr += 1;
         }
     }
-
-    bool MeshBasedFormationCoordinator::isNodeFrozen(const std::string& nodeId) { return false; }
 
     bool MeshBasedFormationCoordinator::isNodeAssigned(const std::string& nodeId)
     {

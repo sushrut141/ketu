@@ -4,9 +4,9 @@
 #include <valarray>
 
 #include "../communication/interfaces.h"
-#include "../formation/grid_formation_coordinator.h"
 
 #include "../objects/node.h"
+#include "../formation/mesh_based_formation_coordinator.h"
 
 namespace ketu::scenarios
 {
@@ -22,7 +22,8 @@ namespace ketu::scenarios
     {
         this->sensing_client_ = std::make_unique<ketu::sensing::SensingClient>(this->world_.get());
         this->communication_client_ = std::make_unique<ketu::communication::CommunicationClient>(this->world_.get());
-        this->formationCoordinator_ = std::make_unique<ketu::formation::GridFormationCoordinator>(world_.get());
+        this->formationCoordinator_ =
+            std::make_unique<ketu::formation::MeshBasedFormationCoordinator>("cylinder.obj", world_.get());
     }
 
     void CollisionAvoidance::setup()

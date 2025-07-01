@@ -19,8 +19,6 @@ namespace ketu::formation
         MeshBasedFormationCoordinator(const std::string& meshPath,
             const ketu::world::World* world);
 
-        int maxConnectivity() override;
-
         int getMaxNeighborCount(const std::string& nodeId) override;
 
         bool isNodeLocallyFormed(const std::string& nodeId) override;
@@ -28,8 +26,6 @@ namespace ketu::formation
         std::vector<std::string> getLocalNeighbors(const std::string& nodeId) override;
 
         void setLocalNeighbors(const std::string& nodeId, const std::vector<std::string> neighbors) override;
-
-        bool isNodeFrozen(const std::string& nodeId) override;
 
         bool isNodeAssigned(const std::string& nodeId) override;
 

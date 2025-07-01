@@ -20,11 +20,6 @@ namespace ketu::formation
     public:
         virtual ~FormationCoordinator() {}
 
-        // Specifies the maximum number of edges for each node in the formation.
-        // Can be used to identify how many neighbors need to be brought into formation.
-        // DEPRECATED
-        virtual int maxConnectivity() = 0;
-
         // Get the maximum number of connected neighbors for the supplied node.
         virtual int getMaxNeighborCount(const std::string& nodeId) = 0;
 
@@ -39,12 +34,6 @@ namespace ketu::formation
         // Existing positions of node is maintained if called when called multiple times with
         // the same set of nodes.
         virtual void setLocalNeighbors(const std::string& nodeId, const std::vector<std::string> neighbors) = 0;
-
-        // Specifies whether node is already in formation.
-        // This does not imply its neighbors are also in formation.
-        // Use isNodeLocallyFormed() for that.
-        // DEPRECATED.
-        virtual bool isNodeFrozen(const std::string& nodeId) = 0;
 
         // Checks whether supplied node is already part of another node's formation.
         virtual bool isNodeAssigned(const std::string& nodeId) = 0;

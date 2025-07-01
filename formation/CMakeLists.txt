@@ -7,8 +7,6 @@ add_library(
 
 add_library(
         FormationCoordinator SHARED
-        grid_formation_coordinator.cpp
-        grid_formation_coordinator.h
         mesh_based_formation_coordinator.cpp
         mesh_based_formation_coordinator.h
         formation_coordinator.h
