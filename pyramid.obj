@@ -1,0 +1,84 @@
+# OBJ file for a simple pyramid with increased height.
+# Each original edge still has at least 3 vertices (endpoints + midpoint).
+
+# Vertices (v)
+# Original Pyramid Vertices (5)
+v 0.0 2.0 0.0      # 1: Apex (P0) - HEIGHT INCREASED HERE
+v 1.0 0.0 1.0      # 2: Base Corner 1 (B1) - Front-Right
+v -1.0 0.0 1.0     # 3: Base Corner 2 (B2) - Front-Left
+v -1.0 0.0 -1.0    # 4: Base Corner 3 (B3) - Back-Left
+v 1.0 0.0 -1.0     # 5: Base Corner 4 (B4) - Back-Right
+
+# Midpoints on Slanted Edges (4) - Y-coordinates recalculated for new height
+v 0.5 1.5 0.5      # 6: Midpoint P0-B1 (M_P0B1) - ( (0+1)/2, (3+0)/2, (0+1)/2 )
+v -0.5 1.5 0.5     # 7: Midpoint P0-B2 (M_P0B2) - ( (0-1)/2, (3+0)/2, (0+1)/2 )
+v -0.5 1.5 -0.5    # 8: Midpoint P0-B3 (M_P0B3) - ( (0-1)/2, (3+0)/2, (0-1)/2 )
+v 0.5 1.5 -0.5     # 9: Midpoint P0-B4 (M_P0B4) - ( (0+1)/2, (3+0)/2, (0-1)/2 )
+
+# Midpoints on Base Edges (4) - These remain unchanged as base is at Y=0
+v 0.0 0.0 1.0      # 10: Midpoint B1-B2 (Front edge)
+v -1.0 0.0 0.0     # 11: Midpoint B2-B3 (Left edge)
+v 0.0 0.0 -1.0     # 12: Midpoint B3-B4 (Back edge)
+v 1.0 0.0 0.0      # 13: Midpoint B4-B1 (Right edge)
+
+# Center of Base (1) - Remains unchanged as base is at Y=0
+v 0.0 0.0 0.0      # 14: Center of Base
+
+# Total Vertices: 14 (Coordinates updated for height)
+
+# Faces (f) - These remain the same as vertex connectivity does not change
+# Side Faces (16 triangles - each of the 4 original triangular sides is subdivided into 4 smaller triangles)
+# The subdivision pattern for a triangle ABC with midpoints M_AB, M_BC, M_CA creates 4 new triangles:
+# AM_AB M_CA, BM_BC M_AB, CM_CA M_BC, and M_AB M_BC M_CA (the central inverted triangle).
+
+# Side Face 1 (Original P0-B1-B2)
+# Vertices involved: P0(1), B1(2), B2(3), M_P0B1(6), M_P0B2(7), M_B1B2(10)
+f 1 6 7
+f 6 2 10
+f 7 10 3
+f 6 7 10
+
+# Side Face 2 (Original P0-B2-B3)
+# Vertices involved: P0(1), B2(3), B3(4), M_P0B2(7), M_P0B3(8), M_B2B3(11)
+f 1 7 8
+f 7 3 11
+f 8 11 4
+f 7 8 11
+
+# Side Face 3 (Original P0-B3-B4)
+# Vertices involved: P0(1), B3(4), B4(5), M_P0B3(8), M_P0B4(9), M_B3B4(12)
+f 1 8 9
+f 8 4 12
+f 9 12 5
+f 8 9 12
+
+# Side Face 4 (Original P0-B4-B1)
+# Vertices involved: P0(1), B4(5), B1(2), M_P0B4(9), M_P0B1(6), M_B4B1(13)
+f 1 9 6
+f 9 5 13
+f 6 13 2
+f 9 6 13
+
+# Base Faces (8 triangles - each of the 4 original base segments is split into 2 triangles)
+# The base is a square (B1-B2-B3-B4) subdivided by its edge midpoints and a central vertex (V14).
+# This creates 4 smaller quadrilaterals, each of which is then split into two triangles.
+
+# Base Quad 1 (B1 - M_B1B2 - V_CenterBase - M_B4B1)
+# Vertices: B1(2), M_B1B2(10), V_CenterBase(14), M_B4B1(13)
+f 2 10 14
+f 2 14 13
+
+# Base Quad 2 (M_B1B2 - B2 - M_B2B3 - V_CenterBase)
+# Vertices: M_B1B2(10), B2(3), M_B2B3(11), V_CenterBase(14)
+f 10 3 14
+f 10 14 11
+
+# Base Quad 3 (M_B2B3 - B3 - M_B3B4 - V_CenterBase)
+# Vertices: M_B2B3(11), B3(4), M_B3B4(12), V_CenterBase(14)
+f 11 4 14
+f 11 14 12
+
+# Base Quad 4 (M_B3B4 - B4 - M_B4B1 - V_CenterBase)
+# Vertices: M_B3B4(12), B4(5), M_B4B1(13), V_CenterBase(14)
+f 12 5 14
+f 12 14 13

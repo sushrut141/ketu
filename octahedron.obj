@@ -1,0 +1,30 @@
+# OBJ file for a simple Octahedron
+# Vertices: 6
+# Faces: 8 (all triangles)
+
+# Vertices (v)
+# Apexes along Y-axis
+v 0.0 1.0 0.0      # 1: Top Apex (North Pole)
+v 0.0 -1.0 0.0     # 2: Bottom Apex (South Pole)
+
+# Vertices on the XZ-plane (equator)
+v 1.0 0.0 0.0      # 3: East
+v 0.0 0.0 1.0      # 4: North
+v -1.0 0.0 0.0     # 5: West
+v 0.0 0.0 -1.0     # 6: South
+
+# Faces (f)
+# Each face is a triangle defined by 3 vertex indices.
+# Top Pyramid Faces (connected to Vertex 1)
+f 1 3 4            # Top-East-North
+f 1 4 5            # Top-North-West
+f 1 5 6            # Top-West-South
+f 1 6 3            # Top-South-East (closes the loop)
+
+# Bottom Pyramid Faces (connected to Vertex 2)
+# Vertices are typically ordered counter-clockwise when viewed from outside the object.
+# For bottom faces, this usually means reversing the order of the equatorial vertices relative to the top faces.
+f 2 4 3            # Bottom-North-East
+f 2 5 4            # Bottom-West-North
+f 2 6 5            # Bottom-South-West
+f 2 3 6            # Bottom

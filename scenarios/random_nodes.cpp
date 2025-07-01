@@ -13,8 +13,8 @@
 namespace ketu::scenarios
 {
 
-    constexpr char MESH_NAME[] = "mesh.obj";
-    constexpr int NUM_FOLLOWERS = 8;
+    constexpr char MESH_NAME[] = "pyramid.obj";
+    constexpr int NUM_FOLLOWERS = 14;
 
     std::unique_ptr<RandomNodes> RandomNodes::create()
     {

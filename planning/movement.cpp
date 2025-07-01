@@ -4,7 +4,7 @@
 
 namespace ketu::planning
 {
-    constexpr double POSITION_ERROR = 0.01f;
+    constexpr double POSITION_ERROR = 0.1f;
 
     ketu::communication::MessageType move(const ketu::telemetry::Position& source,
                                           const ketu::telemetry::Position& target)

@@ -27,3 +27,7 @@ target_link_libraries(main
 
 file(COPY "${CMAKE_SOURCE_DIR}/scenarios/raylib/shaders" DESTINATION "${CMAKE_BINARY_DIR}/")
 file(COPY "${CMAKE_SOURCE_DIR}/mesh.obj" DESTINATION "${CMAKE_BINARY_DIR}/")
+file(COPY "${CMAKE_SOURCE_DIR}/cylinder.obj" DESTINATION "${CMAKE_BINARY_DIR}/")
+file(COPY "${CMAKE_SOURCE_DIR}/octahedron.obj" DESTINATION "${CMAKE_BINARY_DIR}/")
+file(COPY "${CMAKE_SOURCE_DIR}/icosahedron.obj" DESTINATION "${CMAKE_BINARY_DIR}/")
+file(COPY "${CMAKE_SOURCE_DIR}/pyramid.obj" DESTINATION "${CMAKE_BINARY_DIR}/")

@@ -13,13 +13,7 @@ namespace ketu::thirdparty::tinyobj
     namespace
     {
 
-        constexpr double SCALING_FACTOR = 1.0;
-
-        struct MeshData
-        {
-            std::vector<ketu::telemetry::Position> vertices;
-            std::map<int, std::vector<int>> adjacency_list;
-        };
+        constexpr double SCALING_FACTOR = 2.0;
 
         bool LoadObjMeshWithTinyObjLoader(
             const std::string& filePath,

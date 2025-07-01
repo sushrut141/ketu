@@ -1,0 +1,58 @@
+# OBJ file for a simple Icosahedron
+# Vertices: 12
+# Faces: 20 (all triangles)
+
+# Define the golden ratio phi
+# phi = (1 + sqrt(5)) / 2 approx 1.618034
+# For simplicity, using 1.618034 directly.
+
+# Vertices (v)
+# Group 1: (0, +/-1, +/-phi)
+v 0.000000 1.000000 1.618034   # 1
+v 0.000000 1.000000 -1.618034  # 2
+v 0.000000 -1.000000 1.618034  # 3
+v 0.000000 -1.000000 -1.618034 # 4
+
+# Group 2: (+/-1, +/-phi, 0)
+v 1.000000 1.618034 0.000000   # 5
+v -1.000000 1.618034 0.000000  # 6
+v 1.000000 -1.618034 0.000000  # 7
+v -1.000000 -1.618034 0.000000 # 8
+
+# Group 3: (+/-phi, 0, +/-1)
+v 1.618034 0.000000 1.000000   # 9
+v -1.618034 0.000000 1.000000  # 10
+v 1.618034 0.000000 -1.000000  # 11
+v -1.618034 0.000000 -1.000000 # 12
+
+# Faces (f) - 20 equilateral triangles
+# Each face is defined by 3 vertex indices (1-based).
+# The order of vertices defines the winding (counter-clockwise for outward-facing normals).
+
+# 5 faces around vertex 1 (0, 1, phi)
+f 1 5 9
+f 1 9 3
+f 1 3 10
+f 1 10 6
+f 1 6 5
+
+# 5 faces around vertex 2 (0, 1, -phi)
+f 2 11 5
+f 2 5 6
+f 2 6 12
+f 2 12 4
+f 2 4 11
+
+# 5 faces around vertex 3 (0, -1, phi)
+f 3 9 7
+f 3 7 4
+f 3 4 8
+f 3 8 10
+f 3 10 9
+
+# 5 faces around vertex 4 (0, -1, -phi)
+f 4 11 7
+f 4 7 8
+f 4 8 12
+f 4 12 2
+f 4 2 11
