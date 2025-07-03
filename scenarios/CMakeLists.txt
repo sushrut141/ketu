@@ -4,6 +4,8 @@ add_library(
         random_nodes.cpp
         collision_avoidance.h
         collision_avoidance.cpp
+        swarm.h
+        swarm.cpp
         scenario.h
         scenario.cpp
 )

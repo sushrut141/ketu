@@ -35,4 +35,15 @@ namespace ketu::planning
         }
     }
 
+    ketu::communication::MessageType move_within_distance(const ketu::telemetry::Position& source,
+                                          const ketu::telemetry::Position& target, double proximityDistance)
+    {
+        double distance = ketu::telemetry::distance(source, target);
+        if (distance <= proximityDistance)
+        {
+            return ketu::communication::MessageType::STOP;
+        }
+       return move(source, target);
+    }
+
 } // namespace ketu::planning

@@ -138,7 +138,7 @@ namespace ketu::scenarios
                 {
                     sphereColor = GREEN;
                 }
-                DrawSphere(spherePosition, 0.2f, sphereColor);
+                DrawSphere(spherePosition, 0.1f, sphereColor);
             }
 
             DrawPlane((Vector3){0.0f, -2.0f, 0.0f}, (Vector2){20.0, 20.0}, GRAY);

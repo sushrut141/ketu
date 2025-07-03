@@ -9,6 +9,8 @@ add_library(
         FormationCoordinator SHARED
         mesh_based_formation_coordinator.cpp
         mesh_based_formation_coordinator.h
+        proximity_based_formation_coordinator.cpp
+        proximity_based_formation_coordinator.h
         formation_coordinator.h
 )
 

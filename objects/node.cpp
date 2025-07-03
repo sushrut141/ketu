@@ -8,7 +8,7 @@ namespace ketu::objects
 {
     constexpr double MOVEMENT_STEP = 0.005;
     constexpr int EXTRA_NODES_FETCHED = 100;
-    constexpr double NODE_CLEARANCE_AREA = 0.5;
+    constexpr double NODE_CLEARANCE_AREA = 0.3;
 
 
     namespace
@@ -159,27 +159,15 @@ namespace ketu::objects
             // Not all nearest nodes will get assigned slots so fetch it again
             // and only align nodes that are actually assigned.
             const auto& assignedNeighbors = formationCoordinator_->getLocalNeighbors(getId());
-            for (auto it = nearestNodes.begin(); it != nearestNodes.end();)
-            {
-                const std::string& neighborId = it->first;
-                if (std::find(assignedNeighbors.begin(), assignedNeighbors.end(), neighborId) ==
-                    assignedNeighbors.end())
-                {
-                    it = nearestNodes.erase(it);
-                }
-                else
-                {
-                    ++it;
-                }
-            }
+            const auto neighborIdDistances = sensing_client_->getDistanceToNodes(getId(), assignedNeighbors);
 
-            auto neighborMessages = formationCoordinator_->align(getId(), nearestNodes);
+            auto neighborMessages = formationCoordinator_->align(getId(), neighborIdDistances);
             for (const auto& neighbor : neighborMessages)
             {
                 communication_client_->sendMessage(neighbor.first, neighbor.second);
             }
         }
-        else if (neighbors.size() == formationCoordinator_->getMaxNeighborCount(getId()))
+        else
         {
             std::cout << "Annealing node " << getId() << " with all neighbors" << std::endl;
             for (const auto& neighbor : neighbors)
@@ -200,44 +188,6 @@ namespace ketu::objects
                     std::cout << "Propagating annealing to node " << neighbor << std::endl;
                     communication_client_->sendMessage(neighbor, ketu::communication::MessageType::ANNEAL);
                 }
-            }
-        }
-        else
-        {
-            std::cout << "Annealing node " << getId() << " with some neighbors" << std::endl;
-            // Use heuristic to fetch n nearby nodes, we cannot fetch all nodes since that
-            // would be unrealistic in a real sensor.
-            auto nearestNodes = sensing_client_->getKNearestNeighbors(getId(), EXTRA_NODES_FETCHED);
-            std::unordered_map<std::string, ketu::telemetry::Position> availableNeighbors;
-            int availableSlots = formationCoordinator_->getMaxNeighborCount(getId()) - neighbors.size();
-            std::cout << "Available slots: " << availableSlots << " and neighbors: " << neighbors.size() << std::endl;
-            std::cout << "Assigning available slots from nearest nodes: " << nearestNodes.size() << std::endl;
-            for (auto it = nearestNodes.begin(); it != nearestNodes.end();)
-            {
-                if (availableSlots == 0)
-                {
-                    break;
-                }
-                if (formationCoordinator_->isNodeAssigned(it->first))
-                {
-                    ++it;
-                }
-                else
-                {
-                    neighbors.push_back(it->first);
-                    availableNeighbors.insert({it->first, it->second});
-                    availableSlots -= 1;
-                    ++it;
-                }
-            }
-            std::cout << "Post assignment available slots: " << availableSlots << " and neighbors " << neighbors.size()
-                      << std::endl;
-            // Update neighbors to include new nodes.
-            formationCoordinator_->setLocalNeighbors(getId(), neighbors);
-            auto neighborMessages = formationCoordinator_->align(getId(), availableNeighbors);
-            for (const auto& neighbor : neighborMessages)
-            {
-                communication_client_->sendMessage(neighbor.first, neighbor.second);
             }
         }
     }
