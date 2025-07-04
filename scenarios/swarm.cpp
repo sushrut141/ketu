@@ -6,6 +6,7 @@
 #include <valarray>
 
 #include "../communication/interfaces.h"
+#include "../formation/mesh_based_formation_coordinator.h"
 #include "../formation/proximity_based_formation_coordinator.h"
 
 #include "../objects/node.h"
@@ -13,7 +14,8 @@
 namespace ketu::scenarios
 {
 
-    constexpr int NUM_FOLLOWERS = 34;
+    constexpr int NUM_FOLLOWERS = 11;
+    constexpr double SCALING = 3.0;
 
     std::unique_ptr<Swarm> Swarm::create()
     {
@@ -27,7 +29,8 @@ namespace ketu::scenarios
         this->sensing_client_ = std::make_unique<ketu::sensing::SensingClient>(this->world_.get());
         this->communication_client_ = std::make_unique<ketu::communication::CommunicationClient>(this->world_.get());
         this->formationCoordinator_ =
-            std::make_unique<ketu::formation::ProximityBasedFormationCoordinator>(world_.get());
+            std::make_unique<ketu::formation::MeshBasedFormationCoordinator>("icosahedron.obj", world_.get());
+        frameCounter_ = 0.0f;
     }
 
     void Swarm::setup()
@@ -37,7 +40,9 @@ namespace ketu::scenarios
         std::function<void(std::string, ketu::telemetry::Position)> nodeUpdateCallback =
             std::bind(&Swarm::onNodeUpdated, this, std::placeholders::_1, std::placeholders::_2);
         leader->setOnNodeUpdated(nodeUpdateCallback);
-        world_->addNode(leader->getId(), ketu::telemetry::Position::from(1.0, 1.0, 0.5));
+        world_->addNode(leader->getId(), ketu::telemetry::Position::from(
+            SCALING * cos(0), 0.0, SCALING * sin(0))
+            );
         nodes_.push_back(std::move(leader));
 
 
@@ -60,6 +65,26 @@ namespace ketu::scenarios
     void Swarm::onTick(unsigned long long frameNumber)
     {
         auto leaderId = nodes_[0]->getId();
+        if (frameNumber < 500)
+        {
+            std::cout << "Frame number " << frameNumber << std::endl;
+            communication_client_->sendMessage(leaderId, ketu::communication::MessageType::ANNEAL);
+            return;
+        }
+
+        double y = 0.0 + (frameCounter_ / 10);
+
+        double x = SCALING * cos(frameCounter_);
+        double z = SCALING * sin(frameCounter_);
+
+        auto position = ketu::telemetry::Position::from(x, y, z);
+        world_->updateNode(leaderId, position);
+
+        frameCounter_ += 0.005;
+
+        std::cout << "Frame counter : " << frameCounter_ << " frameNumber: " << frameNumber << std::endl;
+
+
         communication_client_->sendMessage(leaderId, ketu::communication::MessageType::ANNEAL);
     }
 

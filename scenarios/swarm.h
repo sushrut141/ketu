@@ -31,6 +31,9 @@ namespace ketu::scenarios
         std::unique_ptr<ketu::formation::FormationCoordinator> formationCoordinator_;
 
         std::vector<std::unique_ptr<ketu::objects::Node>> nodes_;
+
+        double frameCounter_;
+        bool cycle_;
     };
 
 } // namespace ketu::scenarios

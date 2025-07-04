@@ -13,7 +13,7 @@ namespace ketu::thirdparty::tinyobj
     namespace
     {
 
-        constexpr double SCALING_FACTOR = 2.0;
+        constexpr double SCALING_FACTOR = 0.5;
 
         bool LoadObjMeshWithTinyObjLoader(
             const std::string& filePath,

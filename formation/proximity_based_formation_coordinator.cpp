@@ -5,7 +5,7 @@
 namespace ketu::formation
 {
     constexpr int MAX_NEIGHBORS = 3;
-    constexpr double PROXIMITY_DISTANCE = 0.5f;
+    constexpr double PROXIMITY_DISTANCE = 1.0f;
     ketu::telemetry::Position ORIGIN = ketu::telemetry::Position::from(0.0, 0.0, 0.0);
 
      ProximityBasedFormationCoordinator::ProximityBasedFormationCoordinator(const ketu::world::World* world)
