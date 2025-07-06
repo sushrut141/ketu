@@ -7,7 +7,7 @@
 namespace ketu::formation
 {
 
-    MeshBasedFormationCoordinator::MeshBasedFormationCoordinator(const std::string& meshPath, int scalingFactor,
+    MeshBasedFormationCoordinator::MeshBasedFormationCoordinator(const std::string& meshPath, double scalingFactor,
                                                                  const ketu::world::World* world) :
         FormationCoordinator(), world_(world), priorityCounter_(0)
     {

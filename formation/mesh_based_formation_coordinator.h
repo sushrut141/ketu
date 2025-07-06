@@ -16,7 +16,7 @@ namespace ketu::formation
     class MeshBasedFormationCoordinator : public FormationCoordinator
     {
     public:
-        MeshBasedFormationCoordinator(const std::string& meshPath, int scalingFactor, const ketu::world::World* world);
+        MeshBasedFormationCoordinator(const std::string& meshPath, double scalingFactor, const ketu::world::World* world);
 
         int getMaxNeighborCount(const std::string& nodeId) override;
 
