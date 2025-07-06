@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "../objects/node.h"
+#include "../formation/composite_formation_coordinator.h"
 #include "scenario.h"
 
 namespace ketu::scenarios
@@ -28,7 +29,9 @@ namespace ketu::scenarios
 
         std::unique_ptr<ketu::sensing::SensingClient> sensing_client_;
         std::unique_ptr<ketu::communication::CommunicationClient> communication_client_;
-        std::unique_ptr<ketu::formation::FormationCoordinator> formationCoordinator_;
+        std::unique_ptr<ketu::formation::CompositeFormationCoordinator> formationCoordinator_;
+
+        std::vector<std::unique_ptr<ketu::formation::FormationCoordinator>> coordinators_;
 
         std::vector<std::unique_ptr<ketu::objects::Node>> nodes_;
 

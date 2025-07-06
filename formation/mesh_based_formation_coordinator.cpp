@@ -7,15 +7,15 @@
 namespace ketu::formation
 {
 
-    MeshBasedFormationCoordinator::MeshBasedFormationCoordinator(const std::string& meshPath,
+    MeshBasedFormationCoordinator::MeshBasedFormationCoordinator(const std::string& meshPath, int scalingFactor,
                                                                  const ketu::world::World* world) :
         FormationCoordinator(), world_(world), priorityCounter_(0)
     {
-        loader_ = std::move(ketu::thirdparty::tinyobj::Loader::fromOBJFile(meshPath));
+        loader_ = std::move(ketu::thirdparty::tinyobj::Loader::fromOBJFile(meshPath, scalingFactor));
         nodeSlotMapping_ = {};
         availableSlots_ = {};
         priorityMapping_ = {};
-        for (int i = 0 ; i < loader_->getVertices().size() ; i += 1)
+        for (int i = 0; i < loader_->getVertices().size(); i += 1)
         {
             availableSlots_.insert(i);
         }
@@ -29,7 +29,7 @@ namespace ketu::formation
             const auto& connectivity = loader_->getConnectivity().at(slot);
             const int nodePriority = priorityMapping_.at(nodeId);
             int neighborCount = 0;
-            for (const auto& [neighborId, neighborSlot]: nodeSlotMapping_)
+            for (const auto& [neighborId, neighborSlot] : nodeSlotMapping_)
             {
                 if (neighborId == nodeId)
                 {
@@ -64,7 +64,7 @@ namespace ketu::formation
             return false;
         }
 
-        for (const std::string& neighbor: neighbors)
+        for (const std::string& neighbor : neighbors)
         {
             if (!isNodeInPosition(nodeId, neighbor))
             {
@@ -85,7 +85,7 @@ namespace ketu::formation
         const auto& connectivity = loader_->getConnectivity().at(nodeIdx);
 
         std::vector<std::string> neighbors;
-        for (const auto& nodeIdIdxPair: nodeSlotMapping_)
+        for (const auto& nodeIdIdxPair : nodeSlotMapping_)
         {
             if (std::find(connectivity.begin(), connectivity.end(), nodeIdIdxPair.second) != connectivity.end())
             {
@@ -157,8 +157,10 @@ namespace ketu::formation
         const int sourceIdx = nodeSlotMapping_.at(sourceNodeId);
         const int targetIdx = nodeSlotMapping_.at(targetNodeId);
         const auto expectedTargetPosition = loader_->getVertices().at(targetIdx) - loader_->getVertices().at(sourceIdx);
-        const auto targetCurrentPosition = world_->getNodePosition(targetNodeId) - world_->getNodePosition(sourceNodeId);
-        return ketu::planning::move(targetCurrentPosition, expectedTargetPosition) == ketu::communication::MessageType::STOP;
+        const auto targetCurrentPosition =
+            world_->getNodePosition(targetNodeId) - world_->getNodePosition(sourceNodeId);
+        return ketu::planning::move(targetCurrentPosition, expectedTargetPosition) ==
+            ketu::communication::MessageType::STOP;
     }
 
     bool MeshBasedFormationCoordinator::isFormationComplete() {}
@@ -176,8 +178,10 @@ namespace ketu::formation
         for (const auto& [neighborId, neighborRelativePosition] : relativeNodePositions)
         {
             const int neighborIdx = nodeSlotMapping_.at(neighborId);
-            const auto& expectedNeighborPosition = loader_->getVertices().at(neighborIdx) - loader_->getVertices().at(nodeIdx);
-            const ketu::communication::MessageType message = ketu::planning::move(neighborRelativePosition, expectedNeighborPosition);
+            const auto& expectedNeighborPosition =
+                loader_->getVertices().at(neighborIdx) - loader_->getVertices().at(nodeIdx);
+            const ketu::communication::MessageType message =
+                ketu::planning::move(neighborRelativePosition, expectedNeighborPosition);
             messages.insert({neighborId, message});
             if (message == ketu::communication::MessageType::STOP)
             {

@@ -2,22 +2,21 @@
 #define MESH_BASED_FORMATION_COORDINATOR_H
 
 #include <memory>
-#include <unordered_map>
-#include <vector>
 #include <set>
 #include <string>
+#include <unordered_map>
+#include <vector>
 
-#include "formation_coordinator.h"
 #include "../third_party/tinyobj/loader.h"
 #include "../world/world.h"
+#include "formation_coordinator.h"
 
 namespace ketu::formation
 {
     class MeshBasedFormationCoordinator : public FormationCoordinator
     {
     public:
-        MeshBasedFormationCoordinator(const std::string& meshPath,
-            const ketu::world::World* world);
+        MeshBasedFormationCoordinator(const std::string& meshPath, int scalingFactor, const ketu::world::World* world);
 
         int getMaxNeighborCount(const std::string& nodeId) override;
 
@@ -36,7 +35,6 @@ namespace ketu::formation
         const NodeMessages align(const std::string& nodeId, const NodePositions& relativeNodePositions) override;
 
     private:
-
         void assignPriority(const std::string& nodeId);
 
         const ketu::world::World* world_;
@@ -49,6 +47,6 @@ namespace ketu::formation
         std::unordered_map<std::string, int> priorityMapping_;
     };
 
-} // ketu::formation
+} // namespace ketu::formation
 
 #endif // MESH_BASED_FORMATION_COORDINATOR_H

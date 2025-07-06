@@ -7,7 +7,6 @@
 
 #include "../communication/interfaces.h"
 #include "../formation/mesh_based_formation_coordinator.h"
-#include "../formation/proximity_based_formation_coordinator.h"
 
 #include "../objects/node.h"
 
@@ -15,7 +14,7 @@ namespace ketu::scenarios
 {
 
     constexpr int NUM_FOLLOWERS = 11;
-    constexpr double SCALING = 3.0;
+    constexpr double SCALING = 5.0;
 
     std::unique_ptr<Swarm> Swarm::create()
     {
@@ -28,8 +27,17 @@ namespace ketu::scenarios
     {
         this->sensing_client_ = std::make_unique<ketu::sensing::SensingClient>(this->world_.get());
         this->communication_client_ = std::make_unique<ketu::communication::CommunicationClient>(this->world_.get());
-        this->formationCoordinator_ =
-            std::make_unique<ketu::formation::MeshBasedFormationCoordinator>("icosahedron.obj", world_.get());
+
+        coordinators_.push_back(
+            std::make_unique<ketu::formation::MeshBasedFormationCoordinator>("icosahedron.obj", 1.0, world_.get()));
+        coordinators_.push_back(
+            std::make_unique<ketu::formation::MeshBasedFormationCoordinator>("plane.obj", 2.0, world_.get()));
+        std::vector<ketu::formation::FormationCoordinator*> coordinators;
+        coordinators.push_back(coordinators_[0].get());
+        coordinators.push_back(coordinators_[1].get());
+
+        this->formationCoordinator_ = std::make_unique<ketu::formation::CompositeFormationCoordinator>(coordinators);
+        ;
         frameCounter_ = 0.0f;
     }
 
@@ -40,9 +48,7 @@ namespace ketu::scenarios
         std::function<void(std::string, ketu::telemetry::Position)> nodeUpdateCallback =
             std::bind(&Swarm::onNodeUpdated, this, std::placeholders::_1, std::placeholders::_2);
         leader->setOnNodeUpdated(nodeUpdateCallback);
-        world_->addNode(leader->getId(), ketu::telemetry::Position::from(
-            SCALING * cos(0), 0.0, SCALING * sin(0))
-            );
+        world_->addNode(leader->getId(), ketu::telemetry::Position::from(SCALING * cos(0), 1.0, SCALING * sin(0)));
         nodes_.push_back(std::move(leader));
 
 
@@ -65,14 +71,14 @@ namespace ketu::scenarios
     void Swarm::onTick(unsigned long long frameNumber)
     {
         auto leaderId = nodes_[0]->getId();
-        if (frameNumber < 500)
+        if (frameNumber < 1000)
         {
             std::cout << "Frame number " << frameNumber << std::endl;
             communication_client_->sendMessage(leaderId, ketu::communication::MessageType::ANNEAL);
             return;
         }
 
-        double y = 0.0 + (frameCounter_ / 10);
+        double y = 1.0 + (frameCounter_ / 10);
 
         double x = SCALING * cos(frameCounter_);
         double z = SCALING * sin(frameCounter_);
@@ -83,6 +89,14 @@ namespace ketu::scenarios
         frameCounter_ += 0.005;
 
         std::cout << "Frame counter : " << frameCounter_ << " frameNumber: " << frameNumber << std::endl;
+        int frameSection = ((int)(frameCounter_)) % 5;
+        if (frameCounter_ > 0 && frameSection < 2)
+        {
+            formationCoordinator_->switchCoordinator(0);
+        } else
+        {
+            formationCoordinator_->switchCoordinator(1);
+        }
 
 
         communication_client_->sendMessage(leaderId, ketu::communication::MessageType::ANNEAL);

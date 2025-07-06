@@ -14,7 +14,7 @@ namespace ketu::thirdparty::tinyobj
     {
     public:
         // Creates an instance of the loader from an obj file.
-        static std::unique_ptr<Loader> fromOBJFile(const std::string& path);
+        static std::unique_ptr<Loader> fromOBJFile(const std::string& path, int scalingFactor);
 
         // Gets the positions of the vertices for the mesh.
         const std::vector<ketu::telemetry::Position>& getVertices() const;
@@ -28,6 +28,7 @@ namespace ketu::thirdparty::tinyobj
 
         std::vector<ketu::telemetry::Position> vertices_;
         std::map<int, std::vector<int>> connectivity_;
+        int scalingFactor_;
     };
 
 } // ketu::thirdparty::tinyobj

@@ -13,12 +13,11 @@ namespace ketu::formation
         {
             throw std::invalid_argument("Coordinators vector cannot be empty.");
         }
-        // Optional: Check for nullptrs within the coordinators vector itself if that's a concern.
-        // for (const auto* coord : coordinators_) {
-        //     if (!coord) {
-        //         throw std::invalid_argument("Coordinator list contains null pointers.");
-        //     }
-        // }
+        for (const auto* coord : coordinators_) {
+            if (!coord) {
+                throw std::invalid_argument("Coordinator list contains null pointers.");
+            }
+        }
     }
 
     void CompositeFormationCoordinator::switchCoordinator(int idx)
