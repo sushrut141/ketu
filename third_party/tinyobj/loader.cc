@@ -12,14 +12,11 @@ namespace ketu::thirdparty::tinyobj
 
     namespace
     {
-
-        constexpr double SCALING_FACTOR = 0.5;
-
         bool LoadObjMeshWithTinyObjLoader(
             const std::string& filePath,
+            double scalingFactor,
             std::vector<ketu::telemetry::Position>* vertices,
             std::map<int, std::vector<int>>* adjacency_list
-
         )
         {
             ::tinyobj::ObjReaderConfig reader_config;
@@ -50,9 +47,9 @@ namespace ketu::thirdparty::tinyobj
             for (size_t v = 0; v < attrib.vertices.size() / 3; ++v)
             {
                 vertices->push_back({
-                    SCALING_FACTOR * attrib.vertices[3 * v + 0], // X
-                    SCALING_FACTOR * attrib.vertices[3 * v + 1], // Y
-                    SCALING_FACTOR * attrib.vertices[3 * v + 2] // Z
+                    scalingFactor * attrib.vertices[3 * v + 0], // X
+                    scalingFactor * attrib.vertices[3 * v + 1], // Y
+                    scalingFactor * attrib.vertices[3 * v + 2] // Z
                 });
             }
 
@@ -111,10 +108,11 @@ namespace ketu::thirdparty::tinyobj
 
     } // namespace
 
-    std::unique_ptr<Loader> Loader::fromOBJFile(const std::string& path)
+    std::unique_ptr<Loader> Loader::fromOBJFile(const std::string& path, double scalingFactor)
     {
         auto loader = std::make_unique<Loader>();
-        LoadObjMeshWithTinyObjLoader(path, &loader->vertices_, &loader->connectivity_);
+        loader->scalingFactor_ = scalingFactor;
+        LoadObjMeshWithTinyObjLoader(path, loader->scalingFactor_, &loader->vertices_, &loader->connectivity_);
         return std::move(loader);
     }
 

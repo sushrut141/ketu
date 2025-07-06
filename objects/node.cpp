@@ -6,9 +6,9 @@
 
 namespace ketu::objects
 {
-    constexpr double MOVEMENT_STEP = 0.02;
+    constexpr double MOVEMENT_STEP = 0.03;
     constexpr int EXTRA_NODES_FETCHED = 100;
-    constexpr double NODE_CLEARANCE_AREA = 0.8;
+    constexpr double NODE_CLEARANCE_AREA = 0.2;
 
 
     namespace
