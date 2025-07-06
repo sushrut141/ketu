@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "formation_coordinator.h"
-#include "../world/world.h"
+#include "world/world.h"
 
 namespace ketu::formation
 {

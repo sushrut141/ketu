@@ -4,8 +4,8 @@
 #include <string>
 #include <unordered_map>
 
-#include "../telemetry/position.h"
-#include "../communication/interfaces.h"
+#include "telemetry/position.h"
+#include "communication/interfaces.h"
 
 namespace ketu::formation
 {

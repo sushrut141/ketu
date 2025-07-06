@@ -3,10 +3,10 @@
 #include <iostream>
 #include <valarray>
 
-#include "../communication/interfaces.h"
+#include "communication/interfaces.h"
 
-#include "../objects/node.h"
-#include "../formation/mesh_based_formation_coordinator.h"
+#include "objects/node.h"
+#include "formation/mesh_based_formation_coordinator.h"
 
 namespace ketu::scenarios
 {

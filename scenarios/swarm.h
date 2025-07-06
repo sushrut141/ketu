@@ -3,8 +3,10 @@
 
 #include <memory>
 
-#include "../objects/node.h"
-#include "../formation/composite_formation_coordinator.h"
+
+#include "objects/node.h"
+#include "formation/composite_formation_coordinator.h"
+
 #include "scenario.h"
 
 namespace ketu::scenarios

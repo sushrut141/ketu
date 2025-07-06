@@ -1,6 +1,6 @@
 #include "communication_client.h"
 
-#include "../objects/node.h"
+#include "objects/node.h"
 
 namespace ketu::communication
 {

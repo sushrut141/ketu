@@ -3,7 +3,7 @@
 #include <queue>
 #include <unordered_map>
 
-#include "../telemetry/position_utils.h"
+#include "telemetry/position_utils.h"
 
 namespace ketu::sensing
 {

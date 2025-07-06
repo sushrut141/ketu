@@ -1,6 +1,6 @@
 #include "proximity_based_formation_coordinator.h"
 
-#include "../planning/movement.h"
+#include "planning/movement.h"
 
 namespace ketu::formation
 {

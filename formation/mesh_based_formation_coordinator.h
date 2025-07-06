@@ -7,9 +7,10 @@
 #include <unordered_map>
 #include <vector>
 
-#include "../third_party/tinyobj/loader.h"
-#include "../world/world.h"
+
 #include "formation_coordinator.h"
+#include "third_party/tinyobj/loader.h"
+#include "world/world.h"
 
 namespace ketu::formation
 {

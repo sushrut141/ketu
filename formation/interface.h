@@ -1,7 +1,7 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
-#include "../communication/communication_client.h"
+#include "communication/communication_client.h"
 
 namespace ketu::formation
 {
