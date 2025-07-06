@@ -3,7 +3,7 @@
 
 #include <unordered_map>
 
-#include "../world/world.h"
+#include "world/world.h"
 
 namespace ketu::sensing
 {

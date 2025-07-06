@@ -1,7 +1,7 @@
 #ifndef SCENARIOS_H
 #define SCENARIOS_H
 
-#include "../world/world.h"
+#include "world/world.h"
 
 #include <string>
 #include <memory>

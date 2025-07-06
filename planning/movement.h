@@ -1,8 +1,8 @@
 #ifndef MOVEMENT_H
 #define MOVEMENT_H
 
-#include "../communication/interfaces.h"
-#include "../telemetry/position_utils.h"
+#include "communication/interfaces.h"
+#include "telemetry/position_utils.h"
 
 namespace ketu::planning
 {

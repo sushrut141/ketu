@@ -2,7 +2,7 @@
 #define COLLISION_AVOIDANCE_H
 #include <memory>
 
-#include "../objects/node.h"
+#include "objects/node.h"
 #include "scenario.h"
 
 namespace ketu::scenarios

@@ -5,11 +5,11 @@
 #include <iostream>
 #include <valarray>
 
-#include "../communication/interfaces.h"
-#include "../formation/mesh_based_formation_coordinator.h"
-#include "../formation/proximity_based_formation_coordinator.h"
+#include "communication/interfaces.h"
+#include "formation/mesh_based_formation_coordinator.h"
+#include "formation/proximity_based_formation_coordinator.h"
 
-#include "../objects/node.h"
+#include "objects/node.h"
 
 namespace ketu::scenarios
 {

@@ -5,7 +5,7 @@
 #include <memory>
 #include <map>
 
-#include "../../telemetry/position.h"
+#include "telemetry/position.h"
 
 namespace ketu::thirdparty::tinyobj
 {

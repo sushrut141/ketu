@@ -4,10 +4,10 @@
 #include <functional>
 #include <string>
 
-#include "../communication/communication_client.h"
-#include "../communication/interfaces.h"
-#include "../formation/formation_coordinator.h"
-#include "../sensing/sensing_client.h"
+#include "communication/communication_client.h"
+#include "communication/interfaces.h"
+#include "formation/formation_coordinator.h"
+#include "sensing/sensing_client.h"
 
 
 namespace ketu::objects

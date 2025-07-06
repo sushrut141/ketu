@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "../world/world.h"
+#include "world/world.h"
 #include "./interfaces.h"
 
 namespace ketu::communication

@@ -8,9 +8,8 @@ add_library(
 
 # Specify its own include directories if it has public headers
 target_include_directories(TinyObj PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-        $<INSTALL_INTERFACE:include>
-        Telemetry
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}> # Changed to CMAKE_SOURCE_DIR
+        $<INSTALL_INTERFACE:include/third_party> # Adjusted for consistency
 )
 
 target_link_libraries(

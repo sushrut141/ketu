@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "../objects/node.h"
+#include "objects/node.h"
 #include "scenario.h"
 
 namespace ketu::scenarios

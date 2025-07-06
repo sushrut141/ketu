@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "../telemetry/position.h"
+#include "telemetry/position.h"
 
 namespace ketu::world
 {

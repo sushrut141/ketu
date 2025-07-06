@@ -15,20 +15,13 @@ add_library(
 )
 
 target_include_directories(Formation PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-        $<INSTALL_INTERFACE:include>
-        CommunicationInterface
-        Telemetry
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>
+        $<INSTALL_INTERFACE:include/formation>  # Adjusted
 )
 
 target_include_directories(FormationCoordinator PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-        $<INSTALL_INTERFACE:include>
-        World
-        CommunicationInterface
-        Telemetry
-        Planning
-        TinyObj
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>
+        $<INSTALL_INTERFACE:include/formation>  # Adjusted
 )
 
 target_link_libraries(
