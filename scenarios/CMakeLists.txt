@@ -20,7 +20,7 @@ endif()
 # Define public include directories for this library
 # This makes its headers available to projects that link against it (like MyOsgProject)
 target_include_directories(Scenarios PUBLIC
-        $<INSTALL_INTERFACE:include/scenarios> # For installation - Adjusted
+        $<INSTALL_INTERFACE:include/scenarios> # For installation
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}> # For local build within the project
         ${raylib_INCLUDE_DIRS}
         ${raylib_INCLUDE_DIRS}/raylib

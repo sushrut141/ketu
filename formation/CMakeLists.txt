@@ -16,12 +16,12 @@ add_library(
 
 target_include_directories(Formation PUBLIC
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>
-        $<INSTALL_INTERFACE:include/formation>  # Adjusted
+        $<INSTALL_INTERFACE:include/formation>
 )
 
 target_include_directories(FormationCoordinator PUBLIC
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>
-        $<INSTALL_INTERFACE:include/formation>  # Adjusted
+        $<INSTALL_INTERFACE:include/formation>
 )
 
 target_link_libraries(

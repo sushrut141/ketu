@@ -4,7 +4,7 @@ add_library(Objects SHARED node.cpp node.h)
 # Specify its own include directories if it has public headers
 target_include_directories(Objects PUBLIC # Changed from PRIVATE
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>
-        $<INSTALL_INTERFACE:include/objects> # Adjusted
+        $<INSTALL_INTERFACE:include/objects>
 )
 
 target_link_libraries(Objects PRIVATE

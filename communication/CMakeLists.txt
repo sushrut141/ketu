@@ -12,12 +12,12 @@ add_library(
 
 target_include_directories(CommunicationInterface PUBLIC
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>
-        $<INSTALL_INTERFACE:include/communication>  # Adjusted for potential install structure
+        $<INSTALL_INTERFACE:include/communication>
 )
 
-target_include_directories(Communication PUBLIC  # Changed from PRIVATE
+target_include_directories(Communication PUBLIC # Changed from PRIVATE
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>
-        $<INSTALL_INTERFACE:include/communication>  # Adjusted for potential install structure
+        $<INSTALL_INTERFACE:include/communication>
 )
 
 target_link_libraries(

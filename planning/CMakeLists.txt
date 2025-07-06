@@ -8,7 +8,7 @@ add_library(
 # Specify its own include directories if it has public headers
 target_include_directories(Planning PUBLIC
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>
-        $<INSTALL_INTERFACE:include/planning> # Adjusted
+        $<INSTALL_INTERFACE:include/planning>
 )
 
 target_link_libraries(
