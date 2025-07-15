@@ -5,7 +5,7 @@ Lightweight framework to simulate drone formations.
 Ketu provider simple abstractions to mimick the sensors available on drones and create
 scenarios to see how the drones react to each other in the world.
 Using ketu you can simulate autonomous drones that align to create any shape.
-Checkout this [video](https://youtu.be/gfHdOf4GRUU) for a demonstration.
+Checkout this [video](https://www.youtube.com/watch?v=yfkrUXFjLRA) for a demonstration.
 
 ## Why use Ketu?
 
