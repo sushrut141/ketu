@@ -19,17 +19,21 @@ a formation algorithm Ketu is your best bet.
 ## Key Concepts
 
 Ketu takes a simplistic approach to how simulations are done.
-Every simulation is modelled as a scenario.
-You can add multiple nodes to your world in a scenario.
+Every simulation is modelled as a scenario where you can add nodes that sense and interact with each other.
+A scenario is an empty 3D world with the rendering / update abstracted away for you so you can focus on how nodes
+interact with each other. A scenario has a render loop that you can hook into to orchestrate creation and movement of drone formations.
 
-Each node has access to a sensing client and a communication client.
+You can add multiple nodes to your world in a scenario. A node can mean anything but in Ketu we specifically
+use it to mean drones in a formation. You can of course  subclass node and create other types of nodes.
+
+Each node in a formation has access to a sensing client and a communication client.
 You can use the sensing client to get information about objects in the world
 and you can use the communication client to send messages to other objects.
 Simple implementations of these clients are provided, but you are encouraged to 
 extend these clients to create your own clients. 
 
 Creating drone formations is handled by formation co-ordinators through message passing between nodes.
-The grid formation coordinator aligns randomly placed nodes into a grid formation.
+The mesh formation coordinator aligns randomly placed nodes into a formation defined a by a 3D mesh file provided in obj format.
 You can create more complex formation co-ordinators by extending the interface.
 
 Checkout the RandomNodes scenarios in the scenarios directory to get started.
